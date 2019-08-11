@@ -108,9 +108,9 @@ CREATE TABLE "Transactions" (
 ## Project Organization
 We will use separate projects for each platform, in order to separate dependencies. We will need a new project for SQLite specific code, one for the command line interface, and one for platform neutral code.
 
-CommandLine.csproj
-Core.csproj
-SQLiteDatabase.csproj
+CommandLine.csproj  
+Core.csproj  
+SQLiteDatabase.csproj  
 
 For this design, the SQLiteDatabase will get code to create the database and tables. The core project will have the generic code for calling into the install code in the SQLiteDatabase project, and the command line will have the menu structure to call into the core code.
 

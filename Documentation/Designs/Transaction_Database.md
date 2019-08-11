@@ -10,12 +10,12 @@ https://www.investopedia.com/terms/r/returnoninvestment.asp
 
 ROI is interesting, but is biased by length of time and inflows and outflows of cash. In order to compare performance over time across portfolios, we need to adjust for time.
 
-TWR = [(1 + HP1) * (1 + HP2) * ... * (1 + HPN)] - 1
-where:
-TWR = Time weighted return
-n = Number of sub-periods
-HP = (End Value - Initial Value + Cash Flow) / (Initial Value + Cash Flow)
-HPN = Return for sub-period n
+TWR = [(1 + HP1) * (1 + HP2) * ... * (1 + HPN)] - 1  
+where:  
+TWR = Time weighted return  
+n = Number of sub-periods  
+HP = (End Value - Initial Value + Cash Flow) / (Initial Value + Cash Flow)  
+HPN = Return for sub-period n  
 
 https://www.investopedia.com/terms/t/time-weightedror.asp
 
@@ -24,14 +24,14 @@ SQLite is simple and free to use. It allows us to use familiar SQL syntax for da
 https://www.sqlite.org/index.html
 
 ### Datatypes:
-https://www.sqlite.org/datatype3.html
-NULL, INTEGER, REAL, TEXT, BLOB
+https://www.sqlite.org/datatype3.html  
+NULL, INTEGER, REAL, TEXT, BLOB  
 DATETIMEs can be stored as TEXT, INTEGER, or REAL. Advantages / disadvantages here: https://stackoverflow.com/questions/17227110/how-do-datetime-values-work-in-sqlite
 
 ### Conventions:
 https://www.xaprb.com/blog/2008/10/26/the-power-of-a-good-sql-naming-convention/
-https://stackoverflow.com/questions/7662/database-table-and-column-naming-conventions
-Top takeaways:
+https://stackoverflow.com/questions/7662/database-table-and-column-naming-conventions  
+Top takeaways:  
 Pascal case for table and column names. ID columns should be named by the table + ID. Column names with the same data as in another table should be named the same.
 
 # High Level Design:

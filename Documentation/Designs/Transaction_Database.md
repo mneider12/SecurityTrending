@@ -34,6 +34,8 @@ https://stackoverflow.com/questions/7662/database-table-and-column-naming-conven
 Top takeaways:  
 Pascal case for table and column names. ID columns should be named by the table + ID. Column names with the same data as in another table should be named the same.
 
+Project conventions for SQL are at ../Conventions/SQLConventions.md
+
 # High Level Design:
 We will store transaction level data that can be used to build the time weighted periods as needed.
 
@@ -41,9 +43,30 @@ We will store transaction level data that can be used to build the time weighted
 Storing period performance data. We could, but that immediately introduces a second source of truth to keep in sync. The raw data gives more flexibility to calculate other data of interest.
 
 # Detailed Design:
-There will be a new database to hold application data. At this point, the plan is to use a single database, with multiple tables as needed. There will be a new Transactions table. The fields will be as follows:
+There will be a new database to hold application data. At this point, the plan is to use a single database, with multiple tables as needed. There will be a new Transactions table, along with an Actions and Classes table.
 
+## Transactions
 
+| Name | Type | NonNull | PrimaryKey | AutoIncrement | Unique | Default | Check | Foreign Key |
+| ---- | ---- | ------- | ---------- | ------------- | ------ | ------- | ----- | ----------- |
+| TransactionID | INTEGER || YES || YES |
+| Date | TEXT | YES |
+| ActionID | INTEGER | YES |||||| "Actions"("ActionID") |
+| ClassID | INTEGER | YES |||||| "Classes"("ClassID") |
+| Ticker | TEXT |
+| Amount | NUMERIC | YES |
+
+## Actions
+| Name | Type | NonNull | PrimaryKey | AutoIncrement | Unique | Default | Check | Foreign Key |
+| ---- | ---- | ------- | ---------- | ------------- | ------ | ------- | ----- | ----------- |
+| ActionID | INTEGER || YES |
+| Name | TEXT | YES |
+
+## Classes
+| Name | Type | NonNull | PrimaryKey | AutoIncrement | Unique | Default | Check | Foreign Key |
+| ---- | ---- | ------- | ---------- | ------------- | ------ | ------- | ----- | ----------- |
+| ClassID | INTEGER || YES |
+| Name | TEXT | YES |||||||
 
 # Technical Design:
 We will use SQLite as the backend.

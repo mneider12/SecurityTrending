@@ -80,6 +80,7 @@ Classes describe additional type information about a transaction. It might be st
 ## Database
 We will use SQLite as the backend. For a driver, we will use the command line application. We will hard code in some basic menu looking option, and will allow selecting by number. In this case, the only option will be install. We will create a new database within the application working directory, with the three defined tables.
 
+```SQL
 CREATE TABLE "Actions" (
 	"ActionID"	INTEGER NOT NULL UNIQUE,
 	"Name"	TEXT NOT NULL,
@@ -102,6 +103,7 @@ CREATE TABLE "Transactions" (
 	FOREIGN KEY("ActionID") REFERENCES "Actions"("ActionID"),
 	PRIMARY KEY("TransactionID")
 );
+```
 
 ## Project Organization
 We will use separate projects for each platform, in order to separate dependencies. We will need a new project for SQLite specific code, one for the command line interface, and one for platform neutral code.

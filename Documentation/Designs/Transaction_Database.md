@@ -82,13 +82,13 @@ We will use SQLite as the backend. For a driver, we will use the command line ap
 
 ```SQL
 CREATE TABLE "Actions" (
-	"ActionID"	INTEGER NOT NULL UNIQUE,
+	"ActionID"	INTEGER,
 	"Name"	TEXT NOT NULL,
 	PRIMARY KEY("ActionID")
 );
 
 CREATE TABLE "Classes" (
-	"ClassID"	INTEGER NOT NULL,
+	"ClassID"	INTEGER,
 	"Name"	TEXT NOT NULL,
 	PRIMARY KEY("ClassID")
 );
@@ -106,12 +106,17 @@ CREATE TABLE "Transactions" (
 ```
 
 ## Project Organization
-We will use separate projects for each platform, in order to separate dependencies. We will need a new project for SQLite specific code, one for the command line interface, and one for platform neutral code.
+We will use separate projects for each platform, in order to separate dependencies. We will need a new project for SQLite specific code and one for the command line interface
 
 CommandLine.csproj  
-Core.csproj  
-SQLiteDatabase.csproj  
+Database.csproj  
 
-For this design, the SQLiteDatabase will get code to create the database and tables. The core project will have the generic code for calling into the install code in the SQLiteDatabase project, and the command line will have the menu structure to call into the core code.
+For this design, the Database will get code to create the database and tables using SQLite. The command line will have the menu structure to call into the core code.
 
 Additionally, there will be a test project to go with each main project. We will keep a separate directory for the test projects.
+
+### Classes
+SQLiteDatabase.csproj:
+IDatabase.cs - define the necessary functions for database interaction.
+* CreateDatabase - creates the underlying database
+SQliteDatabase.cs - interact with the SQL database and run stored queries. Implements IDatabase.

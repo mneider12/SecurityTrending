@@ -19,3 +19,21 @@ HPN = Return for sub-period n
 
 https://www.investopedia.com/terms/t/time-weightedror.asp
 
+SQLite Datatypes:
+https://www.sqlite.org/datatype3.html
+NULL, INTEGER, REAL, TEXT, BLOB
+DATETIMEs can be stored as TEXT, INTEGER, or REAL. Advantages / disadvantages here: https://stackoverflow.com/questions/17227110/how-do-datetime-values-work-in-sqlite
+
+High Level Design:
+We will store transaction level data that can be used to build the time weighted periods as needed.
+
+Considered, but Not Done:
+Storing period performance data. We could, but that immediately introduces a second source of truth to keep in sync. The raw data gives more flexibility to calculate other data of interest.
+
+Detailed Design:
+There will be a new database to hold application data. At this point, the plan is to use a single database, with multiple tables as needed. There will be a new Transactions table. 
+
+Technical Design:
+We will use SQLite as the backend. It is simple to use and allows familiar SQL accesses.
+
+https://www.sqlite.org/index.html

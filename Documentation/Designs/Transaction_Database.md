@@ -77,16 +77,18 @@ Classes describe additional type information about a transaction. It might be st
 | Name | TEXT | YES |||||||
 
 # Technical Design:
+## Database
 We will use SQLite as the backend. For a driver, we will use the command line application. We will hard code in some basic menu looking option, and will allow selecting by number. In this case, the only option will be install. We will create a new database within the application working directory, with the three defined tables.
 
+```SQL
 CREATE TABLE "Actions" (
-	"ActionID"	INTEGER NOT NULL UNIQUE,
+	"ActionID"	INTEGER,
 	"Name"	TEXT NOT NULL,
 	PRIMARY KEY("ActionID")
 );
 
 CREATE TABLE "Classes" (
-	"ClassID"	INTEGER NOT NULL,
+	"ClassID"	INTEGER,
 	"Name"	TEXT NOT NULL,
 	PRIMARY KEY("ClassID")
 );
@@ -101,3 +103,20 @@ CREATE TABLE "Transactions" (
 	FOREIGN KEY("ActionID") REFERENCES "Actions"("ActionID"),
 	PRIMARY KEY("TransactionID")
 );
+```
+
+## Project Organization
+We will use separate projects for each platform, in order to separate dependencies. We will need a new project for SQLite specific code and one for the command line interface
+
+CommandLine.csproj  
+Database.csproj  
+
+For this design, the Database will get code to create the database and tables using SQLite. The command line will have the menu structure to call into the core code.
+
+Additionally, there will be a test project to go with each main project. We will keep a separate directory for the test projects.
+
+### Classes
+SQLiteDatabase.csproj:
+IDatabase.cs - define the necessary functions for database interaction.
+* CreateDatabase - creates the underlying database
+SQliteDatabase.cs - interact with the SQL database and run stored queries. Implements IDatabase.

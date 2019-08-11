@@ -1,0 +1,1 @@
+Create an application to assess portfolio performance at the portfolio and individual security level. Performance should be reported in both nominal terms and relative to the S&P 500 benchmark.

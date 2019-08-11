@@ -47,6 +47,7 @@ There will be a new database to hold application data. At this point, the plan i
 
 ## Transactions
 Contains details of individual transactions. A transaction is a single exchange of cash for a security, or a cash inflow / outflow from the portfolio.
+
 | Name | Type | NonNull | PrimaryKey | AutoIncrement | Unique | Default | Check | Foreign Key |
 | ---- | ---- | ------- | ---------- | ------------- | ------ | ------- | ----- | ----------- |
 | TransactionID | INTEGER || YES |
@@ -58,6 +59,7 @@ Contains details of individual transactions. A transaction is a single exchange 
 
 ## Actions
 Actions describe the transactions interaction with the cash account. The actions may be buy, sell, deposit or withdrawal.
+
 | Name | Type | NonNull | PrimaryKey | AutoIncrement | Unique | Default | Check | Foreign Key |
 | ---- | ---- | ------- | ---------- | ------------- | ------ | ------- | ----- | ----------- |
 | ActionID | INTEGER || YES |
@@ -65,6 +67,7 @@ Actions describe the transactions interaction with the cash account. The actions
 
 ## Classes
 Classes describe additional type information about a transaction. It might be stock, interest, bond, or transfer.
+
 | Name | Type | NonNull | PrimaryKey | AutoIncrement | Unique | Default | Check | Foreign Key |
 | ---- | ---- | ------- | ---------- | ------------- | ------ | ------- | ----- | ----------- |
 | ClassID | INTEGER || YES |

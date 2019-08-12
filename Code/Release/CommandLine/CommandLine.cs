@@ -10,7 +10,7 @@ namespace CommandLine
     {
         /// <summary>
         /// entry point for the command line application.
-        /// creates the application database
+        /// creates necessary dependencies and runs the main menu
         /// </summary>
         public static void Main()
         {
@@ -19,7 +19,10 @@ namespace CommandLine
 
             RunMenu(database);
         }
-
+        /// <summary>
+        /// run the main menu
+        /// </summary>
+        /// <param name="database"></param>
         private static void RunMenu(IDatabase database)
         {
             string input;
@@ -32,16 +35,24 @@ namespace CommandLine
 
             RunChoice(choice, database);
         }
-
+        /// <summary>
+        /// Show the main menu
+        /// </summary>
         private static void ShowMenu()
         {
             Console.WriteLine("Select an option");
             Console.WriteLine("\t[1] Create database");
+            Console.WriteLine("\t[2] Quit");
         }
-
+        /// <summary>
+        /// validate the user made a valid choice. Blank inputs are treated as quits.
+        /// </summary>
+        /// <param name="input">user input</param>
+        /// <param name="choice">choice made by user, if it corresponded to a valid choice</param>
+        /// <returns>true if the user made a valid selection, including blank</returns>
         private static bool ValidateChoice(string input, out Choice choice)
         {
-            if (string.IsNullOrEmpty(input))
+            if (string.IsNullOrEmpty(input) || input.Equals("2")) 
             {
                 choice = Choice.Quit;
                 return true;
@@ -54,6 +65,11 @@ namespace CommandLine
 
             return false;
         }
+        /// <summary>
+        /// handle a choice made at the main menu
+        /// </summary>
+        /// <param name="choice">choice that was made</param>
+        /// <param name="database">database implementation</param>
 
         private static void RunChoice(Choice choice, IDatabase database)
         {
@@ -64,7 +80,9 @@ namespace CommandLine
                     break;
             }
         }
-
+        /// <summary>
+        /// Represents a choice at the main menu
+        /// </summary>
         private enum Choice
         {
             Create = 1,

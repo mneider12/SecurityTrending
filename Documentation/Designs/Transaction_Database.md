@@ -116,7 +116,7 @@ For this design, the Database will get code to create the database and tables us
 Additionally, there will be a test project to go with each main project. We will keep a separate directory for the test projects.
 
 ### Classes
-SQLiteDatabase.csproj:
-IDatabase.cs - define the necessary functions for database interaction.
-* CreateDatabase - creates the underlying database
-SQliteDatabase.cs - interact with the SQL database and run stored queries. Implements IDatabase.
+SQLiteDatabase.csproj:  
+IDatabase.cs - define the necessary functions for database interaction.  
+* CreateDatabase - creates the underlying database  
+SQliteDatabase.cs - interact with the SQL database and run stored queries. Implements IDatabase.  

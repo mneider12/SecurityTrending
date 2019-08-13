@@ -16,14 +16,9 @@ namespace Database
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=database.sqlite"))
             {
                 connection.Open();
-                using (SQLiteCommand command = new SQLiteCommand(CREATE_ACTIONS_SQL, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-                using (SQLiteCommand command = new SQLiteCommand(CREATE_CLASSES_SQL, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
+
+                CreateActionsTable(connection);
+                CreateClassesTable(connection);
                 using (SQLiteCommand command = new SQLiteCommand(CREATE_TRANSACTIONS_SQL, connection))
                 {
                     command.ExecuteNonQuery();
@@ -32,33 +27,77 @@ namespace Database
             }
         }
         /// <summary>
-        /// SQL command to create the Actions table
+        /// Create the Actions table
         /// </summary>
-        private const string CREATE_ACTIONS_SQL = "CREATE TABLE \"Actions\" (" + 
-                                                    "\"ActionID\" INTEGER," +
-                                                    "\"Name\" TEXT NOT NULL," +
-                                                    "PRIMARY KEY(\"ActionID\")" +
-                                                    ");";
+        /// <param name="connection">database connection</param>
+        public void CreateActionsTable(SQLiteConnection connection)
+        {
+            (int, string)[] values = new (int, string)[]
+            {
+                (1, "buy"),
+                (2, "sell"),
+            };
+            CreateCategoryNameTable(connection, "Actions", "Action", values);
+        }
         /// <summary>
-        /// SQL command to create the Classes table
+        /// Create the Classes table
         /// </summary>
-        private const string CREATE_CLASSES_SQL = "CREATE TABLE \"Classes\" (" +
-                                                    "\"ClassID\" INTEGER," +
-                                                    "\"Name\" TEXT NOT NULL," +
-                                                    "PRIMARY KEY(\"ClassID\")" +
-                                                    ");";
+        /// <param name="connection">database connection</param>
+        public void CreateClassesTable(SQLiteConnection connection)
+        {
+            (int, string)[] values = new (int, string)[]
+            {
+                (1, "cash"),
+                (2, "stock"),
+            };
+            CreateCategoryNameTable(connection, "Classes", "Class", values);
+        }
+        /// <summary>
+        /// create a basic category ID / name table
+        /// </summary>
+        /// <param name="connection">database connection</param>
+        /// <param name="tableName">table name</param>
+        /// <param name="singularOfTableName">singular of the table name</param>
+        /// <param name="values">values to insert into the table</param>
+        public void CreateCategoryNameTable(SQLiteConnection connection, string tableName, string singularOfTableName, (int, string)[] values)
+        {
+            string createSql = string.Format("create table \"{0}\" (" +
+                                                    "\"{1}ID\" integer," +
+                                                    "\"Name\" text not null," +
+                                                    "primary key(\"{1}ID\")" +
+                                                    ");", tableName, singularOfTableName);
+            ExecuteNonQuery(connection, createSql);
+
+            foreach ((int, string) value in values)
+            {
+                string insertSql = string.Format("insert into {0} ({1}ID, Name) values ({2}, '{3}')", tableName, singularOfTableName, value.Item1, value.Item2);
+                ExecuteNonQuery(connection, insertSql);
+            }
+        }
+        /// <summary>
+        /// Execute a non query sequel statement
+        /// </summary>
+        /// <param name="connection">database connection</param>
+        /// <param name="sql">SQL query to execute</param>
+        private void ExecuteNonQuery(SQLiteConnection connection, string sql)
+        {
+            using (SQLiteCommand command = new SQLiteCommand(sql, connection))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
         /// <summary>
         /// SQL command to create the transactions table
         /// </summary>
-        private const string CREATE_TRANSACTIONS_SQL = "CREATE TABLE \"Transactions\" (" +
-	                                                    "\"TransactionID\"	INTEGER," +
-	                                                    "\"Date\"	TEXT NOT NULL," +
-	                                                    "\"ActionID\"	INTEGER NOT NULL," +
-	                                                    "\"ClassID\"	INTEGER NOT NULL," +
-	                                                    "\"Ticker\"	TEXT," +
-	                                                    "\"Amount\"	NUMERIC NOT NULL," +
-	                                                    "FOREIGN KEY(\"ActionID\") REFERENCES \"Actions\"(\"ActionID\")," +
-	                                                    "PRIMARY KEY(\"TransactionID\")" +
+        private const string CREATE_TRANSACTIONS_SQL = "create table \"Transactions\" (" +
+	                                                    "\"TransactionID\"	integer," +
+	                                                    "\"Date\"	text not null," +
+	                                                    "\"ActionID\"	integer not null," +
+	                                                    "\"ClassID\"	integer not null," +
+	                                                    "\"Ticker\"	text," +
+	                                                    "\"Amount\"	numeric not null," +
+	                                                    "foreign key(\"ActionID\") references \"Actions\"(\"ActionID\")," +
+	                                                    "primary key(\"TransactionID\")" +
                                                         ");";
     }
 }

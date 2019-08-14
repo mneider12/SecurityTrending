@@ -61,7 +61,7 @@ Contains details of individual transactions. A transaction is a single exchange 
 | Amount | NUMERIC | YES |
 
 ## Actions
-Actions describe the transactions interaction with the cash account. The actions may be buy, sell, deposit or withdrawal.
+Actions describe the transactions interaction with the cash account. The actions may be buy, sell, deposit, withdrawal, interest, or dividend.
 
 | Name | Type | NonNull | PrimaryKey | AutoIncrement | Unique | Default | Check | Foreign Key |
 | ---- | ---- | ------- | ---------- | ------------- | ------ | ------- | ----- | ----------- |
@@ -69,7 +69,7 @@ Actions describe the transactions interaction with the cash account. The actions
 | Name | TEXT | YES |
 
 ## Classes
-Classes describe additional type information about a transaction. It might be stock, interest, bond, or transfer.
+Classes describe additional type information about a transaction. It might be stock, bond, or cash.
 
 | Name | Type | NonNull | PrimaryKey | AutoIncrement | Unique | Default | Check | Foreign Key |
 | ---- | ---- | ------- | ---------- | ------------- | ------ | ------- | ----- | ----------- |
@@ -112,8 +112,6 @@ CommandLine.csproj
 Database.csproj  
 
 For this design, the Database will get code to create the database and tables using SQLite. The command line will have the menu structure to call into the core code.
-
-Additionally, there will be a test project to go with each main project. We will keep a separate directory for the test projects.
 
 ### Classes
 SQLiteDatabase.csproj:  

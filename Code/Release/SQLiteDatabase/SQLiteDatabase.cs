@@ -28,7 +28,7 @@ namespace Database
         }
         public void InsertTransaction(Transaction transaction)
         {
-            string sql = getInsertTransactionSql(transaction);
+            string sql = GetInsertTransactionSql(transaction);
 
             using (SQLiteConnection connection = OpenConnection())
             {
@@ -105,7 +105,7 @@ namespace Database
                 command.ExecuteNonQuery();
             }
         }
-        private string getInsertTransactionSql(Transaction transaction)
+        private string GetInsertTransactionSql(Transaction transaction)
         {
             return string.Format("insert into \"Transactions\" values ({0}, '{1}', {2}, {3}, '{4}', {5}",
                 transaction.TransactionID, transaction.Date.ToString(), transaction.Action, transaction.Class, transaction.Ticker, transaction.Amount);

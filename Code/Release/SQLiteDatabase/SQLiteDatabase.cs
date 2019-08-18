@@ -26,7 +26,7 @@ namespace Database
                 connection.Close();
             }
         }
-        public void InsertTransaction(Transaction transaction)
+        public void NewTransaction(Transaction transaction)
         {
             string sql = GetInsertTransactionSql(transaction);
 
@@ -107,8 +107,8 @@ namespace Database
         }
         private string GetInsertTransactionSql(Transaction transaction)
         {
-            return string.Format("insert into \"Transactions\" values ({0}, '{1}', {2}, {3}, '{4}', {5}",
-                transaction.TransactionID, transaction.Date.ToString(), transaction.Action, transaction.Class, transaction.Ticker, transaction.Amount);
+            return string.Format("insert into \"Transactions\" values ({0}, '{1}', {2}, {3}, '{4}', {5});",
+                transaction.TransactionID, transaction.Date.ToString(), (int)transaction.Action, (int)transaction.Class, transaction.Ticker, transaction.Amount);
         }
         /// <summary>
         /// SQL command to create the transactions table

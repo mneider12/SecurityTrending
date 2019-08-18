@@ -1,5 +1,7 @@
 ﻿using System;
+using Core;
 using Database;
+using static Core.TransactionEnums;
 
 namespace CommandLine
 {
@@ -88,13 +90,62 @@ namespace CommandLine
                     database.CreateDatabase();
                     break;
                 case Choice.NewTransaction:
-                    NewTransaction();
+                    NewTransaction(database);
                     break;
             }
         }
-        private static void NewTransaction()
+        /// <summary>
+        /// Add a new transaction to the database
+        /// </summary>
+        /// <param name="database">database implementation</param>
+        private static void NewTransaction(IDatabase database)
         {
-            throw new Exception("Not Implemented");
+            Transaction transaction = new Transaction();
+            string input;
+
+            Console.WriteLine("Transaction ID:");
+            input = Console.ReadLine();
+            if (int.TryParse(input, out int transactionID))
+            {
+                transaction.TransactionID = transactionID;
+            }
+
+            Console.WriteLine("Date:");
+            input = Console.ReadLine();
+            if (DateTime.TryParse(input, out DateTime date))
+            {
+                transaction.Date = date;
+            }
+
+            Console.WriteLine("Action:");
+            input = Console.ReadLine();
+            if (Enum.TryParse(input, out TransactionAction action) && Enum.IsDefined(typeof(TransactionAction), action))
+            {
+                transaction.Action = action;
+            }
+
+            Console.WriteLine("Class:");
+            input = Console.ReadLine();
+            if (Enum.TryParse(input, out TransactionClass transactionClass) && Enum.IsDefined(typeof(TransactionClass), transactionClass))
+            {
+                transaction.Class = transactionClass;
+            }
+
+            Console.WriteLine("Ticker:");
+            input = Console.ReadLine();
+            if (input.Length > 0)
+            {
+                transaction.Ticker = input;
+            }
+
+            Console.WriteLine("Amount:");
+            input = Console.ReadLine();
+            if (decimal.TryParse(input, out decimal amount))
+            {
+                transaction.Amount = amount;
+            }
+
+            database.NewTransaction(transaction);
         }
         /// <summary>
         /// Represents a choice at the main menu

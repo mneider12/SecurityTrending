@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,5 +14,10 @@ namespace Database
         /// Create the database, including table definitions
         /// </summary>
         void CreateDatabase();
+        /// <summary>
+        /// Add a new transaction to the database
+        /// </summary>
+        /// <param name="transaction">transaction to add</param>
+        void NewTransaction(Transaction transaction);
     }
 }

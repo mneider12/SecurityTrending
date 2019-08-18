@@ -1,4 +1,5 @@
-﻿using System.Data.SQLite;
+﻿using Core;
+using System.Data.SQLite;
 
 namespace Database
 {
@@ -7,16 +8,15 @@ namespace Database
     /// </summary>
     public class SQLiteDatabase : IDatabase
     {
+        #region IDatabase
         /// <summary>
         /// Create the database, including table definitions
         /// </summary>
         public void CreateDatabase()
         {
             SQLiteConnection.CreateFile("database.sqlite");
-            using (SQLiteConnection connection = new SQLiteConnection("Data Source=database.sqlite"))
+            using (SQLiteConnection connection = OpenConnection())
             {
-                connection.Open();
-
                 CreateActionsTable(connection);
                 CreateClassesTable(connection);
                 using (SQLiteCommand command = new SQLiteCommand(CREATE_TRANSACTIONS_SQL, connection))
@@ -26,11 +26,30 @@ namespace Database
                 connection.Close();
             }
         }
+        public void InsertTransaction(Transaction transaction)
+        {
+            string sql = getInsertTransactionSql(transaction);
+
+            using (SQLiteConnection connection = OpenConnection())
+            {
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+        #endregion
+        private SQLiteConnection OpenConnection()
+        {
+            SQLiteConnection connection = new SQLiteConnection("Data Source=database.sqlite");
+            connection.Open();
+            return connection;
+        }
         /// <summary>
         /// Create the Actions table
         /// </summary>
         /// <param name="connection">database connection</param>
-        public void CreateActionsTable(SQLiteConnection connection)
+        private void CreateActionsTable(SQLiteConnection connection)
         {
             (int, string)[] values = new (int, string)[]
             {
@@ -43,7 +62,7 @@ namespace Database
         /// Create the Classes table
         /// </summary>
         /// <param name="connection">database connection</param>
-        public void CreateClassesTable(SQLiteConnection connection)
+        private void CreateClassesTable(SQLiteConnection connection)
         {
             (int, string)[] values = new (int, string)[]
             {
@@ -59,7 +78,7 @@ namespace Database
         /// <param name="tableName">table name</param>
         /// <param name="singularOfTableName">singular of the table name</param>
         /// <param name="values">values to insert into the table</param>
-        public void CreateCategoryNameTable(SQLiteConnection connection, string tableName, string singularOfTableName, (int, string)[] values)
+        private void CreateCategoryNameTable(SQLiteConnection connection, string tableName, string singularOfTableName, (int, string)[] values)
         {
             string createSql = string.Format("create table \"{0}\" (" +
                                                     "\"{1}ID\" integer," +
@@ -85,6 +104,11 @@ namespace Database
             {
                 command.ExecuteNonQuery();
             }
+        }
+        private string getInsertTransactionSql(Transaction transaction)
+        {
+            return string.Format("insert into \"Transactions\" values ({0}, '{1}', {2}, {3}, '{4}', {5}",
+                transaction.TransactionID, transaction.Date.ToString(), transaction.Action, transaction.Class, transaction.Ticker, transaction.Amount);
         }
         /// <summary>
         /// SQL command to create the transactions table

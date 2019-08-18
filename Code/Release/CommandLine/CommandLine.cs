@@ -42,7 +42,8 @@ namespace CommandLine
         {
             Console.WriteLine("Select an option");
             Console.WriteLine("\t[1] Create database");
-            Console.WriteLine("\t[2] Quit");
+            Console.WriteLine("\t[2] New transaction");
+            Console.WriteLine(string.Format("\t[{0}] Quit", (int) Choice.Quit));
         }
         /// <summary>
         /// validate the user made a valid choice. Blank inputs are treated as quits.
@@ -52,18 +53,30 @@ namespace CommandLine
         /// <returns>true if the user made a valid selection, including blank</returns>
         private static bool ValidateChoice(string input, out Choice choice)
         {
-            if (string.IsNullOrEmpty(input) || input.Equals("2")) 
+            bool isValid;
+
+            if (string.IsNullOrEmpty(input))
             {
                 choice = Choice.Quit;
-                return true;
+                isValid = true;
             }
-
-            if (Enum.TryParse(input, out choice))
+            else if (!int.TryParse(input, out int numericInput))
             {
-                return Enum.IsDefined(typeof(Choice), choice);
+                choice = Choice.Invalid;
+                isValid = false;
+            }
+            else if (Enum.IsDefined(typeof(Choice), numericInput))
+            {
+                choice = (Choice)numericInput;
+                isValid = true;
+            }
+            else
+            {
+                choice = Choice.Invalid;
+                isValid = false;
             }
 
-            return false;
+            return isValid;
         }
         /// <summary>
         /// handle a choice made at the main menu
@@ -78,7 +91,14 @@ namespace CommandLine
                 case Choice.Create:
                     database.CreateDatabase();
                     break;
+                case Choice.NewTransaction:
+                    NewTransaction();
+                    break;
             }
+        }
+        private static void NewTransaction()
+        {
+            throw new Exception("Not Implemented");
         }
         /// <summary>
         /// Represents a choice at the main menu
@@ -86,7 +106,9 @@ namespace CommandLine
         private enum Choice
         {
             Create = 1,
-            Quit = 999,
+            NewTransaction = 2,
+            Quit,
+            Invalid,
         }
     }
 }

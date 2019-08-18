@@ -33,6 +33,6 @@ namespace Core
         /// <summary>
         /// amount of the transaction
         /// </summary>
-        public Decimal Amount { get; set; }
+        public decimal Amount { get; set; }
     }
 }

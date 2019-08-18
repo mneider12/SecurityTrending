@@ -26,6 +26,10 @@ namespace Database
                 connection.Close();
             }
         }
+        /// <summary>
+        /// Add a new transaction to the database
+        /// </summary>
+        /// <param name="transaction">transaction to add</param>
         public void NewTransaction(Transaction transaction)
         {
             string sql = GetInsertTransactionSql(transaction);
@@ -39,6 +43,10 @@ namespace Database
             }
         }
         #endregion
+        /// <summary>
+        /// Get an open database connection. Caller is responsible for disposing the connection.
+        /// </summary>
+        /// <returns>connection</returns>
         private SQLiteConnection OpenConnection()
         {
             SQLiteConnection connection = new SQLiteConnection("Data Source=database.sqlite");
@@ -105,6 +113,11 @@ namespace Database
                 command.ExecuteNonQuery();
             }
         }
+        /// <summary>
+        /// get the SQL query to insert a transaction into the database
+        /// </summary>
+        /// <param name="transaction">transaction to insert</param>
+        /// <returns>SQL</returns>
         private string GetInsertTransactionSql(Transaction transaction)
         {
             return string.Format("insert into \"Transactions\" values ({0}, '{1}', {2}, {3}, '{4}', {5});",

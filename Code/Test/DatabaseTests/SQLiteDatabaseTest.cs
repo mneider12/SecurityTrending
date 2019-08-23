@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Data;
 using System.Data.SQLite;
+using System.IO;
+using Core;
 using Database;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Core.TransactionEnums;
 
 namespace DatabaseTests
 {
@@ -20,6 +23,7 @@ namespace DatabaseTests
         {
             SQLiteDatabase database = new SQLiteDatabase();
             database.CreateDatabase();
+
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=database.sqlite"))
             {
                 connection.Open();
@@ -30,6 +34,54 @@ namespace DatabaseTests
                 CheckClassesTable(connection);
                 CheckTransactionsTable(connection);
             }
+        }
+        /// <summary>
+        /// test the NewTransaction method for adding a single transaction
+        /// </summary>
+        [TestMethod]
+        public void NewTransactionTest()
+        {
+            SQLiteDatabase database = new SQLiteDatabase();
+            database.CreateDatabase();
+
+            Transaction transaction = new Transaction()
+            {
+                TransactionID = 1,
+                Date = new DateTime(2000, 1, 1),
+                Action = TransactionAction.buy,
+                Class = TransactionClass.stock,
+                Ticker = "AMZN",
+                Amount = 1.00M,
+            };
+
+            database.NewTransaction(transaction);
+
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=database.sqlite"))
+            {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand("select * from Transactions where TransactionID = 1;", connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+
+                        Assert.AreEqual(1L, reader["TransactionID"]);
+                        Assert.AreEqual(new DateTime(2000, 1, 1).ToString(), reader["Date"]);
+                        Assert.AreEqual((long)TransactionAction.buy, reader["ActionID"]);
+                        Assert.AreEqual((long)TransactionClass.stock, reader["ClassID"]);
+                        Assert.AreEqual("AMZN", reader["Ticker"]);
+                        Assert.AreEqual(1.00M, reader["Amount"]);
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// delete the database after the test runs
+        /// </summary>
+        [TestCleanup]
+        public void DeleteDatabase()
+        {
+            File.Delete("database.sqlite");
         }
         /// <summary>
         /// Check the table names in the database

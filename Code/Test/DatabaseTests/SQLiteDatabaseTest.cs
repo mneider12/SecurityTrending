@@ -23,14 +23,27 @@ namespace DatabaseTests
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=database.sqlite"))
             {
                 connection.Open();
-                using (SQLiteCommand command = new SQLiteCommand("select name from sqlite_master order by name;", connection))
+
+                CheckTableNames(connection);
+
+                CheckActionsTable(connection);
+                CheckClassesTable(connection);
+                CheckTransactionsTable(connection);
+            }
+        }
+        /// <summary>
+        /// Check the table names in the database
+        /// </summary>
+        /// <param name="connection">database connection</param>
+        private void CheckTableNames(SQLiteConnection connection)
+        {
+            using (SQLiteCommand command = new SQLiteCommand("select name from sqlite_master order by name;", connection))
+            {
+                using (SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
-                    {
-                        CheckNextTableName(reader, "Actions");
-                        CheckNextTableName(reader, "Classes");
-                        CheckNextTableName(reader, "Transactions");
-                    }
+                    CheckNextTableName(reader, "Actions");
+                    CheckNextTableName(reader, "Classes");
+                    CheckNextTableName(reader, "Transactions");
                 }
             }
         }
@@ -43,6 +56,108 @@ namespace DatabaseTests
         {
             reader.Read();
             Assert.AreEqual(expectedTableName, reader["name"]);
+        }
+        /// <summary>
+        /// Check the Actions table metadata
+        /// </summary>
+        /// <param name="connection">database connection</param>
+        private void CheckActionsTable(SQLiteConnection connection)
+        {
+            using (SQLiteCommand command = new SQLiteCommand("pragma table_info(\"Actions\");", connection))
+            {
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    CheckNextColumn(reader, 0, "ActionID", "integer", 0, DBNull.Value, 1);
+                    CheckNextColumn(reader, 1, "Name", "text", 1, DBNull.Value, 0);
+                }
+            }
+
+            using (SQLiteCommand command = new SQLiteCommand("select * from Actions;", connection))
+            {
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    reader.Read();
+
+                    Assert.AreEqual(1L, reader["ActionID"]);
+                    Assert.AreEqual("buy", reader["Name"]);
+
+                    reader.Read();
+
+                    Assert.AreEqual(2L, reader["ActionID"]);
+                    Assert.AreEqual("sell", reader["Name"]);
+                }
+            }
+        }
+        /// <summary>
+        /// Check the Classes table metadata
+        /// </summary>
+        /// <param name="connection">database connection</param>
+        private void CheckClassesTable(SQLiteConnection connection)
+        {
+            using (SQLiteCommand command = new SQLiteCommand("pragma table_info(\"Classes\");", connection))
+            {
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    CheckNextColumn(reader, 0, "ClassID", "integer", 0, DBNull.Value, 1);
+                    CheckNextColumn(reader, 1, "Name", "text", 1, DBNull.Value, 0);
+                }
+            }
+
+            using (SQLiteCommand command = new SQLiteCommand("select * from Classes;", connection))
+            {
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    reader.Read();
+
+                    Assert.AreEqual(1L, reader["ClassID"]);
+                    Assert.AreEqual("cash", reader["Name"]);
+
+                    reader.Read();
+
+                    Assert.AreEqual(2L, reader["ClassID"]);
+                    Assert.AreEqual("stock", reader["Name"]);
+                }
+            }
+        }
+        /// <summary>
+        /// Check the metadata of the Transactions table
+        /// </summary>
+        /// <param name="connection">database connection</param>
+        private void CheckTransactionsTable(SQLiteConnection connection)
+        {
+            using (SQLiteCommand command = new SQLiteCommand("pragma table_info(\"Transactions\");", connection))
+            {
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    CheckNextColumn(reader, 0, "TransactionID", "integer", 0, DBNull.Value, 1);
+                    CheckNextColumn(reader, 1, "Date", "text", 1, DBNull.Value, 0);
+                    CheckNextColumn(reader, 2, "ActionID", "integer", 1, DBNull.Value, 0);
+                    CheckNextColumn(reader, 3, "ClassID", "integer", 1, DBNull.Value, 0);
+                    CheckNextColumn(reader, 4, "Ticker", "text", 0, DBNull.Value, 0);
+                    CheckNextColumn(reader, 5, "Amount", "numeric", 1, DBNull.Value, 0);
+                }
+            }
+        }
+        /// <summary>
+        /// Check the metadata of one column in a table 
+        /// </summary>
+        /// <param name="reader">reader where the next row is the column to check</param>
+        /// <param name="cid">expected cid</param>
+        /// <param name="name">expected name</param>
+        /// <param name="type">expected type</param>
+        /// <param name="notnull">expected value of notnull</param>
+        /// <param name="dflt_value">expected default value</param>
+        /// <param name="pk">expected value of primary key</param>
+        private void CheckNextColumn(SQLiteDataReader reader, long cid, string name, string type, long notnull, object dflt_value, long pk)
+        {
+            reader.Read();
+
+            Assert.AreEqual(cid, reader["cid"]);
+            Assert.AreEqual(name, reader["name"]);
+            Assert.AreEqual(type, reader["type"]);
+            Assert.AreEqual(notnull, reader["notnull"]);
+            Assert.AreEqual(dflt_value, reader["dflt_value"]);
+            Assert.AreEqual(pk, reader["pk"]);
         }
     }
 }

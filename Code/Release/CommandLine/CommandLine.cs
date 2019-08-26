@@ -43,9 +43,20 @@ namespace CommandLine
         private static void ShowMenu()
         {
             Console.WriteLine("Select an option");
-            Console.WriteLine("\t[1] Create database");
-            Console.WriteLine("\t[2] New transaction");
-            Console.WriteLine(string.Format("\t[{0}] Quit", (int) Choice.Quit));
+
+            WriteChoice(Choice.Create, "Create database");
+            WriteChoice(Choice.NewTransaction, "New transaction");
+            WriteChoice(Choice.Quit, "Quit");
+        }
+        /// <summary>
+        /// write out one choice in a menu
+        /// </summary>
+        /// <param name="choice">choice available to user</param>
+        /// <param name="text">text to display</param>
+        private static void WriteChoice(Choice choice, string text)
+        {
+            string display = string.Format("\t[{0}] {1}", (int)choice, text);
+            Console.WriteLine(display);
         }
         /// <summary>
         /// Convert user input into a Choice. Blank inputs are treated as quits.

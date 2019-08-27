@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataFeed\DataFeed.csproj" />
     <ProjectReference Include="..\SQLiteDatabase\Database.csproj" />
   </ItemGroup>
 

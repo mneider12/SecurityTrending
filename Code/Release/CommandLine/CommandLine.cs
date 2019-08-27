@@ -1,6 +1,7 @@
 ﻿using System;
 using Core;
 using Database;
+using DataFeed;
 using static Core.TransactionEnums;
 
 namespace CommandLine
@@ -18,14 +19,16 @@ namespace CommandLine
         {
             // create dependencies here, so they can easily be switched out later
             IDatabase database = new SQLiteDatabase();
+            IAPIKeyQuoteFeed quoteFeed = new AlphaVantage();
 
-            RunMenu(database);
+            RunMenu(database, quoteFeed);
         }
         /// <summary>
         /// run the main menu
         /// </summary>
-        /// <param name="database"></param>
-        private static void RunMenu(IDatabase database)
+        /// <param name="database">database</param>
+        /// <param name="quoteFeed">quote feed</param>
+        private static void RunMenu(IDatabase database, IAPIKeyQuoteFeed quoteFeed)
         {
             Choice choice;
             do
@@ -35,7 +38,7 @@ namespace CommandLine
                 choice = GetChoiceFromInput(input);
             } while (choice == Choice.Invalid);
 
-            RunChoice(choice, database);
+            RunChoice(choice, database, quoteFeed);
         }
         /// <summary>
         /// Show the main menu
@@ -46,6 +49,7 @@ namespace CommandLine
 
             WriteChoice(Choice.Create, "Create database");
             WriteChoice(Choice.NewTransaction, "New transaction");
+            WriteChoice(Choice.SetAPIKey, "Set API key");
             WriteChoice(Choice.Quit, "Quit");
         }
         /// <summary>
@@ -91,9 +95,9 @@ namespace CommandLine
         /// handle a choice made at the main menu
         /// </summary>
         /// <param name="choice">choice that was made</param>
-        /// <param name="database">database implementation</param>
+        /// <param name="database">database</param>
 
-        private static void RunChoice(Choice choice, IDatabase database)
+        private static void RunChoice(Choice choice, IDatabase database, IAPIKeyQuoteFeed quoteFeed)
         {
             switch (choice)
             {
@@ -102,6 +106,9 @@ namespace CommandLine
                     break;
                 case Choice.NewTransaction:
                     NewTransaction(database);
+                    break;
+                case Choice.SetAPIKey:
+                    SetAPIKey(quoteFeed);
                     break;
             }
         }
@@ -158,13 +165,18 @@ namespace CommandLine
 
             database.NewTransaction(transaction);
         }
+        private static void SetAPIKey(IAPIKeyQuoteFeed quoteFeed)
+        {
+            
+        }
         /// <summary>
         /// Represents a choice at the main menu
         /// </summary>
         private enum Choice
         {
-            Create = 1,
-            NewTransaction = 2,
+            Create,
+            NewTransaction,
+            SetAPIKey,
             Quit,
             Invalid,
         }

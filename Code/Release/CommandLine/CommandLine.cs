@@ -165,9 +165,14 @@ namespace CommandLine
 
             database.NewTransaction(transaction);
         }
+        /// <summary>
+        /// set the API key for the data feed
+        /// </summary>
+        /// <param name="quoteFeed"></param>
         private static void SetAPIKey(IAPIKeyQuoteFeed quoteFeed)
         {
-            
+            Console.WriteLine("APIKey:");
+            quoteFeed.APIKey = Console.ReadLine();
         }
         /// <summary>
         /// Represents a choice at the main menu

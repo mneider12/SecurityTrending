@@ -10,10 +10,8 @@ namespace DataFeed
     public interface IAPIKey
     {
         /// <summary>
-        /// set the API key
+        /// API Key
         /// </summary>
-        /// <param name="key"></param>
-        void SetAPIKey(string key);
-
+        string APIKey { set; }
     }
 }

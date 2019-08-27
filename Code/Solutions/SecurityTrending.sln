@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseTests", "..\Test\Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataFeed", "..\Release\DataFeed\DataFeed.csproj", "{B157CC7E-FB01-4B6E-9677-A4F665D17B8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataFeedTests", "..\Test\DataFeedTests\DataFeedTests.csproj", "{B399AF81-4BAB-4282-A185-426FC062BAF7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{B157CC7E-FB01-4B6E-9677-A4F665D17B8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B157CC7E-FB01-4B6E-9677-A4F665D17B8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B157CC7E-FB01-4B6E-9677-A4F665D17B8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B399AF81-4BAB-4282-A185-426FC062BAF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B399AF81-4BAB-4282-A185-426FC062BAF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B399AF81-4BAB-4282-A185-426FC062BAF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B399AF81-4BAB-4282-A185-426FC062BAF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,9 +13,9 @@ namespace DataFeed
         /// <summary>
         /// get a quote for a ticker and date
         /// </summary>
-        /// <param name="ticker">security ticker</param>
         /// <param name="date">date of quote</param>
+        /// <param name="ticker">security ticker</param>
         /// <returns>quote</returns>
-        Quote GetQuote(string ticker, DateTime date);
+        Quote GetQuote(DateTime date, string ticker);
     }
 }

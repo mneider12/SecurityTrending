@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text;
 using System.Xml.Serialization;
 using Core;
+using Newtonsoft.Json.Linq;
 
 namespace DataFeed
 {
@@ -19,31 +21,32 @@ namespace DataFeed
         /// <param name="ticker">security ticker</param>
         /// <param name="date">date of quote</param>
         /// <returns>quote</returns>
-        public Quote GetQuote(string ticker, DateTime date)
+        public Quote GetQuote(DateTime date, string ticker)
         {
-            string requesturl = string.Format("https://www.alphavantage.co/qurey?function=TIME_SERIES_DAILY&symbol={0}&apikey={1}",ticker, APIKey);
-            string jsonResponse;
+            string requesturl = string.Format("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={0}&apikey={1}",ticker, APIKey);
+            string jsonResponse = WebClient.DownloadString(requesturl);
+            JObject jObject = JObject.Parse(jsonResponse);
+            Dictionary<string, Dictionary<string, string>> timeSeries = jObject["Time Series (Daily)"].ToObject<Dictionary<string, Dictionary<string, string>>>();
+            decimal.TryParse(timeSeries[date.ToString("yyyy-MM-dd")]["4. close"], out decimal close);
 
-            using (WebClient webClient = new WebClient())
+            return new Quote()
             {
-                jsonResponse = webClient.DownloadString(requesturl);
-            }
-
-            return null;
+                Close = close,
+            };
         }
         /// <summary>
-        /// 
+        /// load the API key from disk
         /// </summary>
         private void LoadAPIKey()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(string));
             using (TextReader reader = new StreamReader(config_file))
             {
-                APIKey = (string) serializer.Deserialize(reader);
+                apiKey = (string) serializer.Deserialize(reader);
             }
         }
         /// <summary>
-        /// save the API Key to the database
+        /// save the API Key to disk
         /// </summary>
         private void SaveAPIKey()
         {
@@ -73,6 +76,10 @@ namespace DataFeed
                 SaveAPIKey();
             }
         }
+        /// <summary>
+        /// web client to use for web access
+        /// </summary>
+        public IWebClient WebClient { private get; set; }
         /// <summary>
         /// APIKey property backing
         /// </summary>

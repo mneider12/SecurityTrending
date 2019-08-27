@@ -19,9 +19,15 @@ namespace CommandLine
         {
             // create dependencies here, so they can easily be switched out later
             IDatabase database = new SQLiteDatabase();
-            IAPIKeyQuoteFeed quoteFeed = new AlphaVantage();
+            using (IWebClient webClient = new WebClient())
+            {
+                IAPIKeyQuoteFeed quoteFeed = new AlphaVantage()
+                {
+                    WebClient = webClient,
+                };
 
-            RunMenu(database, quoteFeed);
+                RunMenu(database, quoteFeed);
+            }
         }
         /// <summary>
         /// run the main menu
@@ -50,6 +56,7 @@ namespace CommandLine
             WriteChoice(Choice.Create, "Create database");
             WriteChoice(Choice.NewTransaction, "New transaction");
             WriteChoice(Choice.SetAPIKey, "Set API key");
+            WriteChoice(Choice.GetQuote, "Get quote");
             WriteChoice(Choice.Quit, "Quit");
         }
         /// <summary>
@@ -109,6 +116,9 @@ namespace CommandLine
                     break;
                 case Choice.SetAPIKey:
                     SetAPIKey(quoteFeed);
+                    break;
+                case Choice.GetQuote:
+                    GetQuote(quoteFeed);
                     break;
             }
         }
@@ -174,6 +184,19 @@ namespace CommandLine
             Console.WriteLine("APIKey:");
             quoteFeed.APIKey = Console.ReadLine();
         }
+        private static void GetQuote(IAPIKeyQuoteFeed quoteFeed)
+        {
+            Console.WriteLine("Date:");
+            string input = Console.ReadLine();
+            DateTime.TryParse(input, out DateTime date);
+
+            Console.WriteLine("Ticker:");
+            string ticker = Console.ReadLine();
+
+            Quote quote = quoteFeed.GetQuote(date, ticker);
+            Console.WriteLine(quote.Close);
+
+        }
         /// <summary>
         /// Represents a choice at the main menu
         /// </summary>
@@ -182,6 +205,7 @@ namespace CommandLine
             Create,
             NewTransaction,
             SetAPIKey,
+            GetQuote,
             Quit,
             Invalid,
         }

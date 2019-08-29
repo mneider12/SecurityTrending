@@ -39,19 +39,29 @@ namespace DataFeedTest
                 },
             };
 
+            string ticker = "MSFT";
+
+            Quote expectedQuote = new Quote()
+            {
+                Close = 135.5600m,
+                Date = new DateTime(2019, 8, 28),
+                Ticker = ticker,
+            };
+
+            IQuoteFeed quoteFeed;
+
             using (WebClientMock webClient = new WebClientMock() { Responses = responses })
             {
-                IQuoteFeed quoteFeed = new AlphaVantage()
+                quoteFeed = new AlphaVantage()
                 {
                     APIKey = "key",
                     WebClient = webClient,
                 };
-
-                string ticker = "MSFT";
-                Quote quote = quoteFeed.GetQuote(ticker);
-
-                Assert.AreEqual(135.5600m, quote.Close);
             }
+
+            Quote quote = quoteFeed.GetQuote(ticker);
+
+            Assert.AreEqual(expectedQuote, quote);
         }
     }
 }

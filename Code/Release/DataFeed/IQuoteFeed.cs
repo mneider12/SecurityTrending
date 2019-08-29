@@ -11,11 +11,10 @@ namespace DataFeed
     public interface IQuoteFeed
     {
         /// <summary>
-        /// get a quote for a ticker and date
+        /// get the latest quote for a ticker
         /// </summary>
-        /// <param name="date">date of quote</param>
         /// <param name="ticker">security ticker</param>
         /// <returns>quote</returns>
-        Quote GetQuote(DateTime date, string ticker);
+        Quote GetQuote(string ticker);
     }
 }

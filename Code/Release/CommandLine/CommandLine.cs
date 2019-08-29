@@ -184,16 +184,16 @@ namespace CommandLine
             Console.WriteLine("APIKey:");
             quoteFeed.APIKey = Console.ReadLine();
         }
+        /// <summary>
+        /// Get the latest quote for a ticker
+        /// </summary>
+        /// <param name="quoteFeed"></param>
         private static void GetQuote(IAPIKeyQuoteFeed quoteFeed)
         {
-            Console.WriteLine("Date:");
-            string input = Console.ReadLine();
-            DateTime.TryParse(input, out DateTime date);
-
             Console.WriteLine("Ticker:");
             string ticker = Console.ReadLine();
 
-            Quote quote = quoteFeed.GetQuote(date, ticker);
+            Quote quote = quoteFeed.GetQuote(ticker);
             Console.WriteLine(quote.Close);
 
         }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization.Json;
+using System.Text;
 using System.Xml.Serialization;
 using Core;
 using Newtonsoft.Json.Linq;
@@ -16,19 +18,25 @@ namespace DataFeed
         /// get a quote for a ticker and date
         /// </summary>
         /// <param name="ticker">security ticker</param>
-        /// <param name="date">date of quote</param>
         /// <returns>quote</returns>
-        public Quote GetQuote(DateTime date, string ticker)
+        public Quote GetQuote(string ticker)
         {
-            string requesturl = string.Format("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={0}&apikey={1}",ticker, APIKey);
+            string requesturl = string.Format("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={0}&apikey={1}",ticker, APIKey);
             string jsonResponse = WebClient.DownloadString(requesturl);
-            JObject jObject = JObject.Parse(jsonResponse);
-            Dictionary<string, Dictionary<string, string>> timeSeries = jObject["Time Series (Daily)"].ToObject<Dictionary<string, Dictionary<string, string>>>();
-            decimal.TryParse(timeSeries[date.ToString("yyyy-MM-dd")]["4. close"], out decimal close);
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(AlphaVantageGlobalQuoteResponse));
+            AlphaVantageGlobalQuoteResponse response;
+            using (MemoryStream stream = new MemoryStream(Encoding.Unicode.GetBytes(jsonResponse)))
+            {
+                response = (AlphaVantageGlobalQuoteResponse)serializer.ReadObject(stream);
+            }
+
+            DateTime.TryParse(response.GlobalQuote.LatestTradingDay, out DateTime date);
 
             return new Quote()
             {
-                Close = close,
+                Close = response.GlobalQuote.Price,
+                Date = date,
+                Ticker = response.GlobalQuote.Symbol,
             };
         }
         /// <summary>

@@ -20,16 +20,20 @@ namespace DataFeedTest
         {
             Dictionary<string, string> responses = new Dictionary<string, string>()
             {
-                {
-                    "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=TEST&apikey=key",
-                        @"{ ""Meta Data"": { },
-                            ""Time Series (Daily)"": { 
-                                ""2000-01-01"": {
-                                    ""4. close"": ""100.0000"",
-                                },
-                                ""1999-12-31"": {
-                                    ""4. close"": ""100.5000"",
-                                }
+                {   
+                    "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=key",
+                        @"{
+                            ""Global Quote"": {
+                                ""01. symbol"": ""MSFT"",
+                                ""02. open"": ""134.8800"",
+                                ""03. high"": ""135.7600"",
+                                ""04. low"": ""133.5500"",
+                                ""05. price"": ""135.5600"",
+                                ""06. volume"": ""16321151"",
+                                ""07. latest trading day"": ""2019-08-28"",
+                                ""08. previous close"": ""135.7400"",
+                                ""09. change"": ""-0.1800"",
+                                ""10. change percent"": ""-0.1326%""
                             }
                         }"
                 },
@@ -43,11 +47,10 @@ namespace DataFeedTest
                     WebClient = webClient,
                 };
 
-                DateTime date = new DateTime(1999, 12, 31);
-                string ticker = "TEST";
-                Quote quote = quoteFeed.GetQuote(date, ticker);
+                string ticker = "MSFT";
+                Quote quote = quoteFeed.GetQuote(ticker);
 
-                Assert.AreEqual(100.5m, quote.Close);
+                Assert.AreEqual(135.5600m, quote.Close);
             }
         }
     }

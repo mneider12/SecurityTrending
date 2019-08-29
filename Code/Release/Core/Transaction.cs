@@ -27,7 +27,7 @@ namespace Core
         /// <summary>
         /// ticker associated with the transaction
         /// </summary>
-        public string Ticker { get; set; }
+        public string Symbol { get; set; }
         /// <summary>
         /// amount of the transaction
         /// </summary>

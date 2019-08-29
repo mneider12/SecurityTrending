@@ -14,6 +14,7 @@ namespace DataFeedTest
     {
         /// <summary>
         /// test the get quote API
+        /// uses the data from the test API taken on 8/28/19
         /// </summary>
         [TestMethod]
         public void GetQuoteTest()

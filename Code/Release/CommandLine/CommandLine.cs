@@ -163,7 +163,7 @@ namespace CommandLine
             input = Console.ReadLine();
             if (input.Length > 0)
             {
-                transaction.Ticker = input;
+                transaction.Symbol = input;
             }
 
             Console.WriteLine("Amount:");
@@ -202,7 +202,7 @@ namespace CommandLine
         /// </summary>
         private enum Choice
         {
-            Create,
+            Create = 1,
             NewTransaction,
             SetAPIKey,
             GetQuote,

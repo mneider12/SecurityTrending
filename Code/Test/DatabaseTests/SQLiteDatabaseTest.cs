@@ -50,7 +50,7 @@ namespace DatabaseTests
                 Date = new DateTime(2000, 1, 1),
                 Action = TransactionAction.buy,
                 Class = TransactionClass.stock,
-                Ticker = "AMZN",
+                Symbol = "AMZN",
                 Amount = 1.00M,
             };
 
@@ -69,7 +69,7 @@ namespace DatabaseTests
                         Assert.AreEqual(new DateTime(2000, 1, 1).ToString(), reader["Date"]);
                         Assert.AreEqual((long)TransactionAction.buy, reader["ActionID"]);
                         Assert.AreEqual((long)TransactionClass.stock, reader["ClassID"]);
-                        Assert.AreEqual("AMZN", reader["Ticker"]);
+                        Assert.AreEqual("AMZN", reader["Symbol"]);
                         Assert.AreEqual(1.00M, reader["Amount"]);
                     }
                 }
@@ -185,7 +185,7 @@ namespace DatabaseTests
                     CheckNextColumn(reader, 1, "Date", "text", 1, DBNull.Value, 0);
                     CheckNextColumn(reader, 2, "ActionID", "integer", 1, DBNull.Value, 0);
                     CheckNextColumn(reader, 3, "ClassID", "integer", 1, DBNull.Value, 0);
-                    CheckNextColumn(reader, 4, "Ticker", "text", 0, DBNull.Value, 0);
+                    CheckNextColumn(reader, 4, "Symbol", "text", 0, DBNull.Value, 0);
                     CheckNextColumn(reader, 5, "Amount", "numeric", 1, DBNull.Value, 0);
                 }
             }

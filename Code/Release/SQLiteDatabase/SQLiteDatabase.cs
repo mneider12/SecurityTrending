@@ -27,7 +27,11 @@ namespace Database
                 {
                     command.ExecuteNonQuery();
                 }
-                connection.Close();
+                using (SQLiteCommand command = new SQLiteCommand(CREATE_LAST_PRICE_SQL, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+                    connection.Close();
             }
         }
         /// <summary>
@@ -149,6 +153,14 @@ ClassID integer not null,
 Shares numeric not null default 0,
 primary key(Symbol),
 foreign key(ClassID) references Classes(ClassID)
+);";
+
+        private const string CREATE_LAST_PRICE_SQL = @"
+create table LastPrice (
+Symbol text,
+DateTime text not null,
+Price numeric not null,
+primary key(Symbol)
 );";
     }
 }

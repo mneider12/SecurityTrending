@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using Core;
@@ -32,8 +31,9 @@ namespace DatabaseTests
 
                 CheckActionsTable(connection);
                 CheckClassesTable(connection);
-                CheckTransactionsTable(connection);
+                CheckLastPriceTable(connection);
                 CheckPositionsTable(connection);
+                CheckTransactionsTable(connection);
             }
         }
         /// <summary>
@@ -96,6 +96,7 @@ namespace DatabaseTests
                 {
                     CheckNextTableName(reader, "Actions");
                     CheckNextTableName(reader, "Classes");
+                    CheckNextTableName(reader, "LastPrice");
                     CheckNextTableName(reader, "Positions");
                     CheckNextTableName(reader, "Transactions");
                 }
@@ -192,6 +193,26 @@ namespace DatabaseTests
                 }
             }
         }
+        /// <summary>
+        /// check the metadata of the last price table
+        /// </summary>
+        /// <param name="connection">database connection</param>
+        private void CheckLastPriceTable(SQLiteConnection connection)
+        {
+            using (SQLiteCommand command = new SQLiteCommand(@"pragma table_info(LastPrice);", connection))
+            {
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    CheckNextColumn(reader, 0, "Symbol", "text", 0, DBNull.Value, 1);
+                    CheckNextColumn(reader, 1, "DateTime", "text", 1, DBNull.Value, 0);
+                    CheckNextColumn(reader, 2, "Price", "numeric", 1, DBNull.Value, 0);
+                }
+            }
+        }
+        /// <summary>
+        /// check the metadata of the positions table
+        /// </summary>
+        /// <param name="connection">database connection</param>
         private void CheckPositionsTable(SQLiteConnection connection)
         {
             using (SQLiteCommand command = new SQLiteCommand(@"pragma table_info(Positions);", connection))

@@ -106,20 +106,28 @@ namespace CommandLine
 
         private static void RunChoice(Choice choice, IDatabase database, IAPIKeyQuoteFeed quoteFeed)
         {
-            switch (choice)
+            try
             {
-                case Choice.Create:
-                    database.CreateDatabase();
-                    break;
-                case Choice.NewTransaction:
-                    NewTransaction(database);
-                    break;
-                case Choice.SetAPIKey:
-                    SetAPIKey(quoteFeed);
-                    break;
-                case Choice.GetQuote:
-                    GetQuote(quoteFeed);
-                    break;
+                switch (choice)
+                {
+                    case Choice.Create:
+                        database.CreateDatabase();
+                        break;
+                    case Choice.NewTransaction:
+                        NewTransaction(database);
+                        break;
+                    case Choice.SetAPIKey:
+                        SetAPIKey(quoteFeed);
+                        break;
+                    case Choice.GetQuote:
+                        GetQuote(quoteFeed);
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                RunMenu(database, quoteFeed);
             }
         }
         /// <summary>

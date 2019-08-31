@@ -23,6 +23,10 @@ namespace Database
                 {
                     command.ExecuteNonQuery();
                 }
+                using (SQLiteCommand command = new SQLiteCommand(CREATE_POSITIONS_SQL, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
                 connection.Close();
             }
         }
@@ -126,15 +130,25 @@ namespace Database
         /// <summary>
         /// SQL command to create the transactions table
         /// </summary>
-        private const string CREATE_TRANSACTIONS_SQL = "create table \"Transactions\" (" +
-	                                                    "\"TransactionID\"	integer," +
-	                                                    "\"Date\"	text not null," +
-	                                                    "\"ActionID\"	integer not null," +
-	                                                    "\"ClassID\"	integer not null," +
-	                                                    "\"Symbol\"	text," +
-	                                                    "\"Amount\"	numeric not null," +
-	                                                    "foreign key(\"ActionID\") references \"Actions\"(\"ActionID\")," +
-	                                                    "primary key(\"TransactionID\")" +
-                                                        ");";
+        private const string CREATE_TRANSACTIONS_SQL = @"
+create table Transactions (
+TransactionID	integer, 
+Date text not null, 
+ActionID integer not null, 
+ClassID	integer not null, 
+Symbol text, 
+Amount numeric not null, 
+foreign key(ActionID) references Actions(ActionID), 
+primary key(TransactionID)
+);";
+
+        private const string CREATE_POSITIONS_SQL = @"
+create table Positions (
+Symbol text,
+ClassID integer not null,
+Shares numeric not null default 0,
+primary key(Symbol),
+foreign key(ClassID) references Classes(ClassID)
+);";
     }
 }

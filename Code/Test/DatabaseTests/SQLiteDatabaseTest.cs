@@ -33,6 +33,7 @@ namespace DatabaseTests
                 CheckActionsTable(connection);
                 CheckClassesTable(connection);
                 CheckTransactionsTable(connection);
+                CheckPositionsTable(connection);
             }
         }
         /// <summary>
@@ -95,6 +96,7 @@ namespace DatabaseTests
                 {
                     CheckNextTableName(reader, "Actions");
                     CheckNextTableName(reader, "Classes");
+                    CheckNextTableName(reader, "Positions");
                     CheckNextTableName(reader, "Transactions");
                 }
             }
@@ -177,7 +179,7 @@ namespace DatabaseTests
         /// <param name="connection">database connection</param>
         private void CheckTransactionsTable(SQLiteConnection connection)
         {
-            using (SQLiteCommand command = new SQLiteCommand("pragma table_info(\"Transactions\");", connection))
+            using (SQLiteCommand command = new SQLiteCommand("pragma table_info(Transactions);", connection))
             {
                 using (SQLiteDataReader reader = command.ExecuteReader())
                 {
@@ -187,6 +189,18 @@ namespace DatabaseTests
                     CheckNextColumn(reader, 3, "ClassID", "integer", 1, DBNull.Value, 0);
                     CheckNextColumn(reader, 4, "Symbol", "text", 0, DBNull.Value, 0);
                     CheckNextColumn(reader, 5, "Amount", "numeric", 1, DBNull.Value, 0);
+                }
+            }
+        }
+        private void CheckPositionsTable(SQLiteConnection connection)
+        {
+            using (SQLiteCommand command = new SQLiteCommand(@"pragma table_info(Positions);", connection))
+            {
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    CheckNextColumn(reader, 0, "Symbol", "text", 0, DBNull.Value, 1);
+                    CheckNextColumn(reader, 1, "ClassID", "integer", 1, DBNull.Value, 0);
+                    CheckNextColumn(reader, 2, "Shares", "numeric", 1, "0", 0);
                 }
             }
         }

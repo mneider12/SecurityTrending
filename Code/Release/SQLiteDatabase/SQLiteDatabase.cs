@@ -38,7 +38,7 @@ namespace Database
         /// <summary>
         /// Insert a price into the database
         /// </summary>
-        /// <param name="quote"></param>
+        /// <param name="quote">quote with at least symbol, date, and price</param>
         public void SetPrice(Quote quote)
         {
             string sql = GetInsertPriceSql(quote);
@@ -138,7 +138,7 @@ namespace Database
         }
         private string GetInsertPriceSql(Quote quote)
         {
-            return string.Format("insert into LastPrice values ({0}, {1}, {2});", quote.Symbol, quote.Date.ToString(), quote.Price);
+            return string.Format("insert into LastPrice values ('{0}', '{1}', {2});", quote.Symbol, quote.Date.ToString(), quote.Price);
         }
         /// <summary>
         /// SQL command to create the transactions table

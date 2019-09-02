@@ -57,6 +57,7 @@ namespace CommandLine
             WriteChoice(Choice.NewTransaction, "New transaction");
             WriteChoice(Choice.SetAPIKey, "Set API key");
             WriteChoice(Choice.GetQuote, "Get quote");
+            WriteChoice(Choice.SetPrice, "Set price");
             WriteChoice(Choice.Quit, "Quit");
         }
         /// <summary>
@@ -121,6 +122,9 @@ namespace CommandLine
                         break;
                     case Choice.GetQuote:
                         GetQuote(quoteFeed);
+                        break;
+                    case Choice.SetPrice:
+                        SetPrice(database);
                         break;
                 }
             }
@@ -205,8 +209,27 @@ namespace CommandLine
             Console.WriteLine(quote.Price);
 
         }
-        private static void SetPrice()
+        private static void SetPrice(IDatabase database)
         {
+            Console.WriteLine("Symbol:");
+            string symbol = Console.ReadLine();
+
+            Console.WriteLine("Date:");
+            string input = Console.ReadLine();
+            DateTime.TryParse(input, out DateTime date);
+
+            Console.WriteLine("Price:");
+            input = Console.ReadLine();
+            decimal.TryParse(input, out decimal price);
+
+            Quote quote = new Quote()
+            {
+                Symbol = symbol,
+                Date = date,
+                Price = price,
+            };
+
+            database.SetPrice(quote);
 
         }
         /// <summary>
@@ -218,7 +241,7 @@ namespace CommandLine
             NewTransaction,
             SetAPIKey,
             GetQuote,
-            AddPrice,
+            SetPrice,
             Quit,
             Invalid,
         }

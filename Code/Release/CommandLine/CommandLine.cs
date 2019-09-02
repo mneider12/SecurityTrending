@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core;
 using Database;
 using DataFeed;
@@ -68,6 +69,7 @@ namespace CommandLine
             WriteChoice(Choice.SetAPIKey, "Set API key");
             WriteChoice(Choice.GetQuote, "Get quote");
             WriteChoice(Choice.SetPrice, "Set price");
+            WriteChoice(Choice.UpdatePrices, "Update prices");
             WriteChoice(Choice.Quit, "Quit");
         }
         /// <summary>
@@ -134,11 +136,9 @@ namespace CommandLine
                 case Choice.SetPrice:
                     SetPrice(database);
                     break;
-            }
-
-            if (choice != Choice.Quit)
-            {
-                RunMenu(database, quoteFeed);
+                case Choice.UpdatePrices:
+                    UpdatePrices(database, quoteFeed);
+                    break;
             }
         }
         /// <summary>
@@ -216,6 +216,10 @@ namespace CommandLine
             Console.WriteLine(quote.Price);
 
         }
+        /// <summary>
+        /// Set the price for a security
+        /// </summary>
+        /// <param name="database">database connection</param>
         private static void SetPrice(IDatabase database)
         {
             Console.WriteLine("Symbol:");
@@ -237,7 +241,21 @@ namespace CommandLine
             };
 
             database.SetPrice(quote);
+        }
+        /// <summary>
+        /// update the prices in the database
+        /// </summary>
+        /// <param name="database">database</param>
+        /// <param name="quoteFeed">quote feed</param>
+        private static void UpdatePrices(IDatabase database, IQuoteFeed quoteFeed)
+        {
+            List<string> symbols = database.GetSymbols();
 
+            foreach (string symbol in symbols)
+            {
+                Quote quote = quoteFeed.GetQuote(symbol);
+                database.SetPrice(quote);
+            }
         }
         /// <summary>
         /// Represents a choice at the main menu

@@ -1,4 +1,5 @@
 ﻿using Core;
+using System.Collections.Generic;
 using System.Data.SQLite;
 
 namespace Database
@@ -17,12 +18,16 @@ namespace Database
             SQLiteConnection.CreateFile("database.sqlite");
             using (SQLiteConnection connection = OpenConnection())
             {
-                CreateActionsTable(connection);
-                CreateClassesTable(connection);
-                ExecuteNonQuery(CREATE_TRANSACTIONS_SQL, connection);
-                ExecuteNonQuery(CREATE_POSITIONS_SQL, connection);
-                ExecuteNonQuery(CREATE_LAST_PRICE_SQL, connection);
+                using (SQLiteTransaction transaction = connection.BeginTransaction())
+                {
+                    CreateActionsTable(connection);
+                    CreateClassesTable(connection);
+                    ExecuteNonQuery(CREATE_TRANSACTIONS_SQL, connection);
+                    ExecuteNonQuery(CREATE_POSITIONS_SQL, connection);
+                    ExecuteNonQuery(CREATE_LAST_PRICE_SQL, connection);
 
+                    transaction.Commit();
+                }
                 connection.Close();
             }
         }
@@ -41,8 +46,48 @@ namespace Database
         /// <param name="quote">quote with at least symbol, date, and price</param>
         public void SetPrice(Quote quote)
         {
-            string sql = GetInsertPriceSql(quote);
-            ExecuteNonQuery(sql);
+            using (SQLiteConnection connection = OpenConnection())
+            {
+                using (SQLiteTransaction transaction = connection.BeginTransaction())
+                {
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = GetUpdatePriceSql(quote);
+                        if (command.ExecuteNonQuery() == 0)
+                        {
+                            command.CommandText = GetInsertPriceSql(quote);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    transaction.Commit();
+                }
+                connection.Close();
+            }
+        }
+        /// <summary>
+        /// get a list of symbols relevant to a portfolio
+        /// </summary>
+        /// <returns>list of symbols</returns>
+        public List<string> GetSymbols()
+        {
+            List<string> symbols = new List<string>();
+
+            using (SQLiteConnection connection = OpenConnection())
+            {
+                using (SQLiteCommand command = new SQLiteCommand(GET_SYMBOLS_SQL, connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while(reader.Read())
+                        {
+                            symbols.Add(reader.GetString(0));
+                        }
+                    }
+                }
+                connection.Close();
+            }
+
+            return symbols;
         }
         #endregion
         /// <summary>
@@ -140,6 +185,10 @@ namespace Database
         {
             return string.Format("insert into LastPrice values ('{0}', '{1}', {2});", quote.Symbol, quote.Date.ToString(), quote.Price);
         }
+        private string GetUpdatePriceSql(Quote quote)
+        {
+            return string.Format("update LastPrice set DateTime='{0}', Price={1} where Symbol='{2}'", quote.Date.ToString(), quote.Price, quote.Symbol);
+        }
         /// <summary>
         /// SQL command to create the transactions table
         /// </summary>
@@ -171,5 +220,8 @@ DateTime text not null,
 Price numeric not null,
 primary key(Symbol)
 );";
+        private const string GET_SYMBOLS_SQL = @"
+select Symbol
+from LastPrice;";
     }
 }

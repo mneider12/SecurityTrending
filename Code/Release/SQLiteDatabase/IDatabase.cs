@@ -24,5 +24,10 @@ namespace Database
         /// </summary>
         /// <param name="quote">a quote with the price, symbol, and date minimally set</param>
         void SetPrice(Quote quote);
+        /// <summary>
+        /// get a list of the symbols relevant to a portfolio
+        /// </summary>
+        /// <returns>list of symbols</returns>
+        List<string> GetSymbols();
     }
 }

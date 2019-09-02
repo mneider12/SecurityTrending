@@ -39,12 +39,22 @@ namespace CommandLine
             Choice choice;
             do
             {
-                ShowMenu();
-                string input = Console.ReadLine();
-                choice = GetChoiceFromInput(input);
-            } while (choice == Choice.Invalid);
+                do
+                {
+                    ShowMenu();
+                    string input = Console.ReadLine();
+                    choice = GetChoiceFromInput(input);
+                } while (choice == Choice.Invalid);
+                try
+                {
+                    RunChoice(choice, database, quoteFeed);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
 
-            RunChoice(choice, database, quoteFeed);
+            } while (choice != Choice.Quit);
         }
         /// <summary>
         /// Show the main menu
@@ -107,30 +117,27 @@ namespace CommandLine
 
         private static void RunChoice(Choice choice, IDatabase database, IAPIKeyQuoteFeed quoteFeed)
         {
-            try
+            switch (choice)
             {
-                switch (choice)
-                {
-                    case Choice.Create:
-                        database.CreateDatabase();
-                        break;
-                    case Choice.NewTransaction:
-                        NewTransaction(database);
-                        break;
-                    case Choice.SetAPIKey:
-                        SetAPIKey(quoteFeed);
-                        break;
-                    case Choice.GetQuote:
-                        GetQuote(quoteFeed);
-                        break;
-                    case Choice.SetPrice:
-                        SetPrice(database);
-                        break;
-                }
+                case Choice.Create:
+                    database.CreateDatabase();
+                    break;
+                case Choice.NewTransaction:
+                    NewTransaction(database);
+                    break;
+                case Choice.SetAPIKey:
+                    SetAPIKey(quoteFeed);
+                    break;
+                case Choice.GetQuote:
+                    GetQuote(quoteFeed);
+                    break;
+                case Choice.SetPrice:
+                    SetPrice(database);
+                    break;
             }
-            catch (Exception e)
+
+            if (choice != Choice.Quit)
             {
-                Console.WriteLine(e.Message);
                 RunMenu(database, quoteFeed);
             }
         }
@@ -242,6 +249,7 @@ namespace CommandLine
             SetAPIKey,
             GetQuote,
             SetPrice,
+            UpdatePrices,
             Quit,
             Invalid,
         }

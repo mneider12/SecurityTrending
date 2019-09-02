@@ -19,19 +19,11 @@ namespace Database
             {
                 CreateActionsTable(connection);
                 CreateClassesTable(connection);
-                using (SQLiteCommand command = new SQLiteCommand(CREATE_TRANSACTIONS_SQL, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-                using (SQLiteCommand command = new SQLiteCommand(CREATE_POSITIONS_SQL, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-                using (SQLiteCommand command = new SQLiteCommand(CREATE_LAST_PRICE_SQL, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-                    connection.Close();
+                ExecuteNonQuery(CREATE_TRANSACTIONS_SQL, connection);
+                ExecuteNonQuery(CREATE_POSITIONS_SQL, connection);
+                ExecuteNonQuery(CREATE_LAST_PRICE_SQL, connection);
+
+                connection.Close();
             }
         }
         /// <summary>
@@ -41,14 +33,16 @@ namespace Database
         public void NewTransaction(Transaction transaction)
         {
             string sql = GetInsertTransactionSql(transaction);
-
-            using (SQLiteConnection connection = OpenConnection())
-            {
-                using (SQLiteCommand command = new SQLiteCommand(sql, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-            }
+            ExecuteNonQuery(sql);
+        }
+        /// <summary>
+        /// Insert a price into the database
+        /// </summary>
+        /// <param name="quote"></param>
+        public void SetPrice(Quote quote)
+        {
+            string sql = GetInsertPriceSql(quote);
+            ExecuteNonQuery(sql);
         }
         #endregion
         /// <summary>
@@ -101,20 +95,31 @@ namespace Database
                                                     "\"Name\" text not null," +
                                                     "primary key(\"{1}ID\")" +
                                                     ");", tableName, singularOfTableName);
-            ExecuteNonQuery(connection, createSql);
+            ExecuteNonQuery(createSql, connection);
 
             foreach ((int, string) value in values)
             {
                 string insertSql = string.Format("insert into {0} ({1}ID, Name) values ({2}, '{3}')", tableName, singularOfTableName, value.Item1, value.Item2);
-                ExecuteNonQuery(connection, insertSql);
+                ExecuteNonQuery(insertSql, connection);
+            }
+        }
+        /// <summary>
+        /// Execute a non query sequel statement on a new database connection
+        /// </summary>
+        /// <param name="sql">SQL to execute</param>
+        private void ExecuteNonQuery(string sql)
+        {
+            using (SQLiteConnection connection = OpenConnection())
+            {
+                ExecuteNonQuery(sql, connection);
             }
         }
         /// <summary>
         /// Execute a non query sequel statement
         /// </summary>
         /// <param name="connection">database connection</param>
-        /// <param name="sql">SQL query to execute</param>
-        private void ExecuteNonQuery(SQLiteConnection connection, string sql)
+        /// <param name="sql">SQL to execute</param>
+        private void ExecuteNonQuery(string sql, SQLiteConnection connection)
         {
             using (SQLiteCommand command = new SQLiteCommand(sql, connection))
             {
@@ -130,6 +135,10 @@ namespace Database
         {
             return string.Format("insert into \"Transactions\" values ({0}, '{1}', {2}, {3}, '{4}', {5});",
                 transaction.TransactionID, transaction.Date.ToString(), (int)transaction.Action, (int)transaction.Class, transaction.Symbol, transaction.Amount);
+        }
+        private string GetInsertPriceSql(Quote quote)
+        {
+            return string.Format("insert into LastPrice values ({0}, {1}, {2});", quote.Symbol, quote.Date.ToString(), quote.Price);
         }
         /// <summary>
         /// SQL command to create the transactions table

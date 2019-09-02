@@ -11,17 +11,17 @@ namespace Core
     {
         #region public properties
         /// <summary>
-        /// closing price
+        /// price
         /// </summary>
-        public decimal Close { get; set; }
+        public decimal Price { get; set; }
         /// <summary>
         /// date of quote
         /// </summary>
         public DateTime Date { get; set; }
         /// <summary>
-        /// security ticker
+        /// security symbol
         /// </summary>
-        public string Ticker { get; set; }
+        public string Symbol { get; set; }
         #endregion
         #region Object overrides
         /// <summary>
@@ -39,7 +39,7 @@ namespace Core
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return Close.GetHashCode() + Date.GetHashCode() + Ticker.GetHashCode();
+            return Price.GetHashCode() + Date.GetHashCode() + Symbol.GetHashCode();
         }
         #endregion
         #region private methods
@@ -50,7 +50,7 @@ namespace Core
         /// <returns>whether the quotes are equal</returns>
         private bool Equals(Quote other)
         {
-            return other != null && Close == other.Close && Date.Equals(other.Date) && Ticker == other.Ticker;
+            return other != null && Price == other.Price && Date.Equals(other.Date) && Symbol == other.Symbol;
         }
         #endregion
     }

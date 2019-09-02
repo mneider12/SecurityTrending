@@ -202,7 +202,11 @@ namespace CommandLine
             string ticker = Console.ReadLine();
 
             Quote quote = quoteFeed.GetQuote(ticker);
-            Console.WriteLine(quote.Close);
+            Console.WriteLine(quote.Price);
+
+        }
+        private static void SetPrice()
+        {
 
         }
         /// <summary>
@@ -210,10 +214,11 @@ namespace CommandLine
         /// </summary>
         private enum Choice
         {
-            Create = 1,
+            Create = 1, // manually set to 1 to set the start of the menu options to 1
             NewTransaction,
             SetAPIKey,
             GetQuote,
+            AddPrice,
             Quit,
             Invalid,
         }

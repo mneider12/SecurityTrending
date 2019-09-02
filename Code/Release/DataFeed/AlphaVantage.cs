@@ -34,9 +34,9 @@ namespace DataFeed
 
             return new Quote()
             {
-                Close = response.GlobalQuote.Price,
+                Price = response.GlobalQuote.Price,
                 Date = date,
-                Ticker = response.GlobalQuote.Symbol,
+                Symbol = response.GlobalQuote.Symbol,
             };
         }
         /// <summary>

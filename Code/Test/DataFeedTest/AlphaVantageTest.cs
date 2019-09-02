@@ -44,9 +44,9 @@ namespace DataFeedTest
 
             Quote expectedQuote = new Quote()
             {
-                Close = 135.5600m,
+                Price = 135.5600m,
                 Date = new DateTime(2019, 8, 28),
-                Ticker = ticker,
+                Symbol = ticker,
             };
 
             IQuoteFeed quoteFeed;

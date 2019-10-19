@@ -7,13 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine", "..\Release\C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "..\Release\SQLiteDatabase\Database.csproj", "{EDC2D5F8-A9C0-41F9-9FDF-F6CBB05E308B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "..\Release\Core\Core.csproj", "{A76A5DC3-C3FD-4A31-91D1-022A43B5F2BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "..\Release\Core\Model.csproj", "{A76A5DC3-C3FD-4A31-91D1-022A43B5F2BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseTests", "..\Test\DatabaseTests\DatabaseTests.csproj", "{38C8156C-99C9-4B09-BE4E-D6030E2BC56F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataFeed", "..\Release\DataFeed\DataFeed.csproj", "{B157CC7E-FB01-4B6E-9677-A4F665D17B8A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataFeedTest", "..\Test\DataFeedTest\DataFeedTest.csproj", "{76694B34-C7BF-4D4F-9E14-6D104FBC60B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "..\Release\Logic\Logic.csproj", "{AA761AD5-8108-4571-9BB3-583BFD4650BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{76694B34-C7BF-4D4F-9E14-6D104FBC60B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76694B34-C7BF-4D4F-9E14-6D104FBC60B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76694B34-C7BF-4D4F-9E14-6D104FBC60B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA761AD5-8108-4571-9BB3-583BFD4650BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA761AD5-8108-4571-9BB3-583BFD4650BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA761AD5-8108-4571-9BB3-583BFD4650BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA761AD5-8108-4571-9BB3-583BFD4650BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

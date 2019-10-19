@@ -60,9 +60,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Release\Core\Core.csproj">
+    <ProjectReference Include="..\..\Release\Core\Model.csproj">
       <Project>{A76A5DC3-C3FD-4A31-91D1-022A43B5F2BF}</Project>
-      <Name>Core</Name>
+      <Name>Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Release\DataFeed\DataFeed.csproj">
       <Project>{B157CC7E-FB01-4B6E-9677-A4F665D17B8A}</Project>

@@ -1,4 +1,5 @@
 ﻿using Core;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -29,5 +30,16 @@ namespace Database
         /// </summary>
         /// <returns>list of symbols</returns>
         List<string> GetSymbols();
+        /// <summary>
+        /// get one position
+        /// </summary>
+        /// <param name="symbol">symbol for position to retrieve</param>
+        /// <returns>position</returns>
+        Position GetPosition(string symbol);
+        /// <summary>
+        /// set a position into the database
+        /// </summary>
+        /// <param name="postion">position</param>
+        void SetPosition(Position postion);
     }
 }

@@ -4,6 +4,7 @@ using System.IO;
 using Core;
 using Database;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model;
 using static Core.TransactionEnums;
 
 namespace DatabaseTests
@@ -23,18 +24,16 @@ namespace DatabaseTests
             SQLiteDatabase database = new SQLiteDatabase();
             database.CreateDatabase();
 
-            using (SQLiteConnection connection = new SQLiteConnection("Data Source=database.sqlite"))
-            {
-                connection.Open();
+            using SQLiteConnection connection = new SQLiteConnection("Data Source=database.sqlite");
+            connection.Open();
 
-                CheckTableNames(connection);
+            CheckTableNames(connection);
 
-                CheckActionsTable(connection);
-                CheckClassesTable(connection);
-                CheckLastPriceTable(connection);
-                CheckPositionsTable(connection);
-                CheckTransactionsTable(connection);
-            }
+            CheckActionsTable(connection);
+            CheckClassesTable(connection);
+            CheckLastPriceTable(connection);
+            CheckPositionsTable(connection);
+            CheckTransactionsTable(connection);
         }
         /// <summary>
         /// test the NewTransaction method for adding a single transaction
@@ -57,24 +56,42 @@ namespace DatabaseTests
 
             database.NewTransaction(transaction);
 
-            using (SQLiteConnection connection = new SQLiteConnection("Data Source=database.sqlite"))
-            {
-                connection.Open();
-                using (SQLiteCommand command = new SQLiteCommand("select * from Transactions where TransactionID = 1;", connection))
-                {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
-                    {
-                        reader.Read();
+            using SQLiteConnection connection = new SQLiteConnection("Data Source=database.sqlite");
+            connection.Open();
+            using SQLiteCommand command = new SQLiteCommand("select * from Transactions where TransactionID = 1;", connection);
+            using SQLiteDataReader reader = command.ExecuteReader();
+            reader.Read();
 
-                        Assert.AreEqual(1L, reader["TransactionID"]);
-                        Assert.AreEqual(new DateTime(2000, 1, 1).ToString(), reader["Date"]);
-                        Assert.AreEqual((long)TransactionAction.buy, reader["ActionID"]);
-                        Assert.AreEqual((long)TransactionClass.stock, reader["ClassID"]);
-                        Assert.AreEqual("AMZN", reader["Symbol"]);
-                        Assert.AreEqual(1.00M, reader["Amount"]);
-                    }
-                }
-            }
+            Assert.AreEqual(1L, reader["TransactionID"]);
+            Assert.AreEqual(new DateTime(2000, 1, 1).ToString(), reader["Date"]);
+            Assert.AreEqual((long)TransactionAction.buy, reader["ActionID"]);
+            Assert.AreEqual((long)TransactionClass.stock, reader["ClassID"]);
+            Assert.AreEqual("AMZN", reader["Symbol"]);
+            Assert.AreEqual(1.00M, reader["Amount"]);
+
+        }
+        /// <summary>
+        /// test the GetPosition function for a single position
+        /// </summary>
+        [TestMethod]
+        public void GetPositionTest()
+        {
+            SQLiteDatabase database = new SQLiteDatabase();
+            database.CreateDatabase();
+
+            Position expectedPosition = new Position()
+            {
+                Symbol = "TEST",
+                Class = TransactionClass.stock,
+                Shares = 100.55,
+            };
+            database.SetPosition(expectedPosition);
+
+            Position actualPosition = database.GetPosition(expectedPosition.Symbol);
+
+            Assert.AreEqual(expectedPosition.Symbol, actualPosition.Symbol);
+            Assert.AreEqual(expectedPosition.Class, actualPosition.Class);
+            Assert.AreEqual(expectedPosition.Shares, actualPosition.Shares);
         }
         /// <summary>
         /// delete the database after the test runs
@@ -149,30 +166,39 @@ namespace DatabaseTests
         /// <param name="connection">database connection</param>
         private void CheckClassesTable(SQLiteConnection connection)
         {
-            using (SQLiteCommand command = new SQLiteCommand("pragma table_info(\"Classes\");", connection))
-            {
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    CheckNextColumn(reader, 0, "ClassID", "integer", 0, DBNull.Value, 1);
-                    CheckNextColumn(reader, 1, "Name", "text", 1, DBNull.Value, 0);
-                }
-            }
+            CheckClassesTableInfo(connection);
+            CheckClassTableContent(connection);
+        }
+        /// <summary>
+        /// check the content of the class table
+        /// </summary>
+        /// <param name="connection">database connection</param>
+        private static void CheckClassTableContent(SQLiteConnection connection)
+        {
+            using SQLiteCommand command = new SQLiteCommand("select * from Classes;", connection);
+            using SQLiteDataReader reader = command.ExecuteReader();
 
-            using (SQLiteCommand command = new SQLiteCommand("select * from Classes;", connection))
-            {
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    reader.Read();
+            reader.Read();
 
-                    Assert.AreEqual(1L, reader["ClassID"]);
-                    Assert.AreEqual("cash", reader["Name"]);
+            Assert.AreEqual(1L, reader["ClassID"]);
+            Assert.AreEqual("cash", reader["Name"]);
 
-                    reader.Read();
+            reader.Read();
 
-                    Assert.AreEqual(2L, reader["ClassID"]);
-                    Assert.AreEqual("stock", reader["Name"]);
-                }
-            }
+            Assert.AreEqual(2L, reader["ClassID"]);
+            Assert.AreEqual("stock", reader["Name"]);
+        }
+        /// <summary>
+        /// check the metadata for the Class table
+        /// </summary>
+        /// <param name="connection">database connection</param>
+        private void CheckClassesTableInfo(SQLiteConnection connection)
+        {
+            using SQLiteCommand command = new SQLiteCommand("pragma table_info(\"Classes\");", connection);
+            using SQLiteDataReader reader = command.ExecuteReader();
+
+            CheckNextColumn(reader, 0, "ClassID", "integer", 0, DBNull.Value, 1);
+            CheckNextColumn(reader, 1, "Name", "text", 1, DBNull.Value, 0);
         }
         /// <summary>
         /// Check the metadata of the Transactions table

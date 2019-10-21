@@ -1,6 +1,9 @@
 ﻿using Core;
+using Model;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using static Core.TransactionEnums;
 
 namespace Database
 {
@@ -88,6 +91,63 @@ namespace Database
             }
 
             return symbols;
+        }
+        /// <summary>
+        /// get a position from the database
+        /// </summary>
+        /// <param name="symbol">symbol for the position</param>
+        /// <returns>position</returns>
+        public Position GetPosition(string symbol)
+        {
+            Position position = new Position()
+            {
+                Symbol = symbol,
+            };
+            string sql = GetPositionSql(symbol);
+
+            using (SQLiteConnection connection = OpenConnection())
+            {
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            long classID = (long)reader["ClassID"];
+                            decimal shares = (decimal)reader["Shares"];
+
+                            position.Class = (TransactionClass)classID;
+                            position.Shares = (double) shares;
+                        }
+                    }
+                }
+            }
+
+            return position;
+        }
+        /// <summary>
+        /// set one position into the database
+        /// </summary>
+        /// <param name="position">position</param>
+        public void SetPosition(Position position)
+        {
+            using (SQLiteConnection connection = OpenConnection())
+            {
+                using (SQLiteTransaction transaction = connection.BeginTransaction())
+                {
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = GetUpdatePositionSql(position);
+                        if (command.ExecuteNonQuery() == 0)
+                        {
+                            command.CommandText = GetInsertPositionSql(position);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    transaction.Commit();
+                }
+                connection.Close();
+            }
         }
         #endregion
         /// <summary>
@@ -188,6 +248,33 @@ namespace Database
         private string GetUpdatePriceSql(Quote quote)
         {
             return string.Format("update LastPrice set DateTime='{0}', Price={1} where Symbol='{2}'", quote.Date.ToString(), quote.Price, quote.Symbol);
+        }
+        /// <summary>
+        /// get SQL statement to get a position from the database
+        /// </summary>
+        /// <param name="symbol">symbol</param>
+        /// <returns>SQL statement</returns>
+        private string GetPositionSql(string symbol)
+        {
+            return string.Format("select ClassID, Shares from Positions where Symbol='{0}'", symbol);
+        }
+        /// <summary>
+        /// get SQL statement to update a position in the database
+        /// </summary>
+        /// <param name="position">position</param>
+        /// <returns>SQL statement</returns>
+        private string GetUpdatePositionSql(Position position)
+        {
+            return string.Format("update Positions set Shares='{0}' where Symbol='{1}';", position.Shares, position.Symbol);
+        }
+        /// <summary>
+        /// get SQL statement to insert a position into the database
+        /// </summary>
+        /// <param name="position">position</param>
+        /// <returns>SQL statement</returns>
+        private string GetInsertPositionSql(Position position)
+        {
+            return string.Format("insert into Positions values ('{0}', '{1}', '{2}');", position.Symbol, (int)position.Class, position.Shares);
         }
         /// <summary>
         /// SQL command to create the transactions table

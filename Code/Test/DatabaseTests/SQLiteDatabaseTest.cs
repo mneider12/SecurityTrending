@@ -52,6 +52,7 @@ namespace DatabaseTests
                 Class = TransactionClass.stock,
                 Symbol = "AMZN",
                 Amount = 1.00M,
+                Quantity = 100,
             };
 
             database.NewTransaction(transaction);
@@ -216,6 +217,7 @@ namespace DatabaseTests
                     CheckNextColumn(reader, 3, "ClassID", "integer", 1, DBNull.Value, 0);
                     CheckNextColumn(reader, 4, "Symbol", "text", 0, DBNull.Value, 0);
                     CheckNextColumn(reader, 5, "Amount", "numeric", 1, DBNull.Value, 0);
+                    CheckNextColumn(reader, 6, "Quantity", "numeric", 1, DBNull.Value, 0);
                 }
             }
         }

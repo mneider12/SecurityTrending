@@ -32,5 +32,9 @@ namespace Core
         /// amount of the transaction
         /// </summary>
         public decimal Amount { get; set; }
+        /// <summary>
+        /// quantity of the transaction
+        /// </summary>
+        public double Quantity { get; set; }
     }
 }

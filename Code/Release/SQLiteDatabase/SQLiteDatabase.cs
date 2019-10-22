@@ -238,8 +238,9 @@ namespace Database
         /// <returns>SQL</returns>
         private string GetInsertTransactionSql(Transaction transaction)
         {
-            return string.Format("insert into \"Transactions\" values ({0}, '{1}', {2}, {3}, '{4}', {5});",
-                transaction.TransactionID, transaction.Date.ToString(), (int)transaction.Action, (int)transaction.Class, transaction.Symbol, transaction.Amount);
+            return string.Format("insert into \"Transactions\" values ({0}, '{1}', {2}, {3}, '{4}', {5}, {6});",
+                transaction.TransactionID, transaction.Date.ToString(), (int)transaction.Action, (int)transaction.Class, transaction.Symbol,
+                transaction.Amount, transaction.Quantity);
         }
         private string GetInsertPriceSql(Quote quote)
         {
@@ -286,7 +287,8 @@ Date text not null,
 ActionID integer not null, 
 ClassID	integer not null, 
 Symbol text, 
-Amount numeric not null, 
+Amount numeric not null,
+Quantity numeric not null,
 foreign key(ActionID) references Actions(ActionID), 
 primary key(TransactionID)
 );";

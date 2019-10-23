@@ -39,6 +39,10 @@
         public enum TransactionClass
         {
             /// <summary>
+            /// default value indicates that the class is unknown or not set
+            /// </summary>
+            undefined = 0,
+            /// <summary>
             /// both sides of a transaction are cash (i.e. a transfer)
             /// </summary>
             cash = 1,

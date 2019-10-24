@@ -2,7 +2,6 @@
 using Database;
 using Model;
 using System;
-using System.Diagnostics;
 using static Core.TransactionEnums;
 
 namespace Logic

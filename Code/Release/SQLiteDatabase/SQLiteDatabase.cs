@@ -232,7 +232,7 @@ namespace Database
             }
         }
         /// <summary>
-        /// get the SQL query to insert a transaction into the database
+        /// get the SQL command to insert a transaction into the database
         /// </summary>
         /// <param name="transaction">transaction to insert</param>
         /// <returns>SQL</returns>
@@ -242,10 +242,20 @@ namespace Database
                 transaction.TransactionID, transaction.Date.ToString(), (int)transaction.Action, (int)transaction.Class, transaction.Symbol,
                 transaction.Amount, transaction.Quantity);
         }
+        /// <summary>
+        /// get the SQL command to insert a price into the database
+        /// </summary>
+        /// <param name="quote">quote with the price</param>
+        /// <returns>SQL</returns>
         private string GetInsertPriceSql(Quote quote)
         {
             return string.Format("insert into LastPrice values ('{0}', '{1}', {2});", quote.Symbol, quote.Date.ToString(), quote.Price);
         }
+        /// <summary>
+        /// get the SQL command to update a price in the database
+        /// </summary>
+        /// <param name="quote">quote with the price</param>
+        /// <returns>SQL</returns>
         private string GetUpdatePriceSql(Quote quote)
         {
             return string.Format("update LastPrice set DateTime='{0}', Price={1} where Symbol='{2}'", quote.Date.ToString(), quote.Price, quote.Symbol);
@@ -292,7 +302,9 @@ Quantity numeric not null,
 foreign key(ActionID) references Actions(ActionID), 
 primary key(TransactionID)
 );";
-
+        /// <summary>
+        /// SQL command to create the positions table
+        /// </summary>
         private const string CREATE_POSITIONS_SQL = @"
 create table Positions (
 Symbol text,
@@ -301,7 +313,9 @@ Shares numeric not null default 0,
 primary key(Symbol),
 foreign key(ClassID) references Classes(ClassID)
 );";
-
+        /// <summary>
+        /// SQL command to create the last price table
+        /// </summary>
         private const string CREATE_LAST_PRICE_SQL = @"
 create table LastPrice (
 Symbol text,
@@ -309,6 +323,9 @@ DateTime text not null,
 Price numeric not null,
 primary key(Symbol)
 );";
+        /// <summary>
+        /// SQL query to select the symbols in the last price table
+        /// </summary>
         private const string GET_SYMBOLS_SQL = @"
 select Symbol
 from LastPrice;";

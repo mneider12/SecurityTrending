@@ -12,9 +12,9 @@ namespace Model
         /// </summary>
         public string Symbol { get; set; }
         /// <summary>
-        /// Number of shares of the security
+        /// Quantity in the position
         /// </summary>
-        public double Shares { get; set; }
+        public double Quantity { get; set; }
         /// <summary>
         /// class of the position
         /// </summary>

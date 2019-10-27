@@ -29,10 +29,10 @@ namespace Logic
             switch (transaction.Action)
             {
                 case TransactionAction.buy:
-                    position.Shares += transaction.Quantity;
+                    position.Quantity += transaction.Quantity;
                     break;
                 case TransactionAction.sell:
-                    position.Shares -= transaction.Quantity;
+                    position.Quantity -= transaction.Quantity;
                     break;
                 default:
                     throw new Exception("Not implemented");
@@ -64,7 +64,7 @@ namespace Logic
                 errorMessage = "Cannot override existing position's class";
                 hasError = true;
             }
-            else if (position.Shares < 0)
+            else if (position.Quantity < 0)
             {
                 errorMessage = "Position quantity must be positive";
                 hasError = true;

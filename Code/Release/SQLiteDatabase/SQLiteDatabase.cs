@@ -117,7 +117,7 @@ namespace Database
                             decimal shares = (decimal)reader["Shares"];
 
                             position.Class = (TransactionClass)classID;
-                            position.Shares = (double) shares;
+                            position.Quantity = (double) shares;
                         }
                     }
                 }
@@ -266,7 +266,7 @@ namespace Database
         /// <returns>SQL statement</returns>
         private string GetUpdatePositionSql(Position position)
         {
-            return string.Format("update Positions set Shares='{0}' where Symbol='{1}';", position.Shares, position.Symbol);
+            return string.Format("update Positions set Shares='{0}' where Symbol='{1}';", position.Quantity, position.Symbol);
         }
         /// <summary>
         /// get SQL statement to insert a position into the database
@@ -275,7 +275,7 @@ namespace Database
         /// <returns>SQL statement</returns>
         private string GetInsertPositionSql(Position position)
         {
-            return string.Format("insert into Positions values ('{0}', '{1}', '{2}');", position.Symbol, (int)position.Class, position.Shares);
+            return string.Format("insert into Positions values ('{0}', '{1}', '{2}');", position.Symbol, (int)position.Class, position.Quantity);
         }
         /// <summary>
         /// SQL command to create the transactions table

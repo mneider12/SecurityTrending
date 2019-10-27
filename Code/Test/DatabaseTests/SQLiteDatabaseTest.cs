@@ -84,7 +84,7 @@ namespace DatabaseTests
             {
                 Symbol = "TEST",
                 Class = TransactionClass.stock,
-                Shares = 100.55,
+                Quantity = 100.55,
             };
             database.SetPosition(expectedPosition);
 
@@ -92,7 +92,7 @@ namespace DatabaseTests
 
             Assert.AreEqual(expectedPosition.Symbol, actualPosition.Symbol);
             Assert.AreEqual(expectedPosition.Class, actualPosition.Class);
-            Assert.AreEqual(expectedPosition.Shares, actualPosition.Shares);
+            Assert.AreEqual(expectedPosition.Quantity, actualPosition.Quantity);
         }
         /// <summary>
         /// delete the database after the test runs

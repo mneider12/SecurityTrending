@@ -45,7 +45,7 @@ namespace LogicTests
             {
                 Symbol = "TEST",
                 Class = TransactionClass.stock,
-                Shares = 250,
+                Quantity = 250,
             };
 
             CommitTransaction(database, firstPurchase);
@@ -86,7 +86,7 @@ namespace LogicTests
             {
                 Symbol = "TEST",
                 Class = TransactionClass.stock,
-                Shares = 75,
+                Quantity = 75,
             };
 
             CommitTransaction(database, purchase);
@@ -188,7 +188,7 @@ namespace LogicTests
         {
             Assert.AreEqual(expectedPosition.Symbol, actualPosition.Symbol);
             Assert.AreEqual(expectedPosition.Class, actualPosition.Class);
-            Assert.AreEqual(expectedPosition.Shares, actualPosition.Shares);
+            Assert.AreEqual(expectedPosition.Quantity, actualPosition.Quantity);
         }
         #endregion
     }

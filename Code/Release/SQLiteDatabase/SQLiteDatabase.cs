@@ -328,6 +328,6 @@ primary key(Symbol)
         /// </summary>
         private const string GET_SYMBOLS_SQL = @"
 select Symbol
-from LastPrice;";
+from Positions;";
     }
 }

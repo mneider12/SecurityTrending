@@ -95,11 +95,11 @@ namespace LogicTests
             VerifyPosition(database, expectedPosition);
         }
         /// <summary>
-        /// test that attempting to sell more shares than available results in an exception
+        /// test that attempting to sell more quantity than available results in an exception
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(LogicException))]
-        public void CommitTransaction_Sell_NotEnoughShares()
+        public void CommitTransaction_Sell_NotEnoughQuantity()
         {
             IDatabase database = new SQLiteDatabase();
             database.CreateDatabase();

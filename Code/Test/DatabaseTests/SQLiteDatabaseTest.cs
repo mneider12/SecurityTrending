@@ -249,7 +249,7 @@ namespace DatabaseTests
                 {
                     CheckNextColumn(reader, 0, "Symbol", "text", 0, DBNull.Value, 1);
                     CheckNextColumn(reader, 1, "ClassID", "integer", 1, DBNull.Value, 0);
-                    CheckNextColumn(reader, 2, "Shares", "numeric", 1, "0", 0);
+                    CheckNextColumn(reader, 2, "Quantity", "numeric", 1, "0", 0);
                 }
             }
         }

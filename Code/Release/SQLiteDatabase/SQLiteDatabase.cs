@@ -114,10 +114,10 @@ namespace Database
                         if (reader.Read())
                         {
                             long classID = (long)reader["ClassID"];
-                            decimal shares = (decimal)reader["Shares"];
+                            decimal quantity = (decimal)reader["Quantity"];
 
                             position.Class = (TransactionClass)classID;
-                            position.Quantity = (double) shares;
+                            position.Quantity = (double) quantity;
                         }
                     }
                 }
@@ -267,7 +267,7 @@ namespace Database
         /// <returns>SQL statement</returns>
         private string GetPositionSql(string symbol)
         {
-            return string.Format("select ClassID, Shares from Positions where Symbol='{0}'", symbol);
+            return string.Format("select ClassID, Quantity from Positions where Symbol='{0}'", symbol);
         }
         /// <summary>
         /// get SQL statement to update a position in the database
@@ -276,7 +276,7 @@ namespace Database
         /// <returns>SQL statement</returns>
         private string GetUpdatePositionSql(Position position)
         {
-            return string.Format("update Positions set Shares='{0}' where Symbol='{1}';", position.Quantity, position.Symbol);
+            return string.Format("update Positions set Quantity='{0}' where Symbol='{1}';", position.Quantity, position.Symbol);
         }
         /// <summary>
         /// get SQL statement to insert a position into the database
@@ -309,7 +309,7 @@ primary key(TransactionID)
 create table Positions (
 Symbol text,
 ClassID integer not null,
-Shares numeric not null default 0,
+Quantity numeric not null default 0,
 primary key(Symbol),
 foreign key(ClassID) references Classes(ClassID)
 );";

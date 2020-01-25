@@ -1,0 +1,1 @@
+The solution will not build on the first try, becasue the test projects do not specify a build dependency on the release projects.

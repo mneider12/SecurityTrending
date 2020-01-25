@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
 using Core;
@@ -93,6 +94,60 @@ namespace DatabaseTests
             Assert.AreEqual(expectedPosition.Symbol, actualPosition.Symbol);
             Assert.AreEqual(expectedPosition.Class, actualPosition.Class);
             Assert.AreEqual(expectedPosition.Quantity, actualPosition.Quantity);
+        }
+        [TestMethod]
+        public void GetPositionsTest()
+        {
+            SQLiteDatabase database = new SQLiteDatabase();
+            database.CreateDatabase();
+
+            Position position1 = new Position()
+            {
+                Symbol = "ONE",
+                Quantity = 100,
+                Class = TransactionClass.stock,
+            };
+
+            Position position2 = new Position()
+            {
+                Symbol = "TWO",
+                Quantity = 150,
+                Class = TransactionClass.bond,
+            };
+
+            database.SetPosition(position1);
+            database.SetPosition(position2);
+
+            List<Position> expectedPositions = new List<Position>()
+            {
+                position1, position2
+            };
+
+            List<Position> actualPositions = database.GetPositions();
+            
+
+        }
+        /// <summary>
+        /// test GetPrice
+        /// </summary>
+        [TestMethod]
+        public void GetPriceTest()
+        {
+            SQLiteDatabase database = new SQLiteDatabase();
+            database.CreateDatabase();
+
+            Quote expectedQuote = new Quote()
+            {
+                Symbol = "TEST",
+                Date = new DateTime(2000, 1, 1),
+                Price = 100.00m,
+            };
+
+            database.SaveQuote(expectedQuote);
+
+            Quote actualQuote = database.GetLastQuote(expectedQuote.Symbol);
+
+            Assert.AreEqual(expectedQuote.Price, actualQuote.Price);
         }
         /// <summary>
         /// delete the database after the test runs

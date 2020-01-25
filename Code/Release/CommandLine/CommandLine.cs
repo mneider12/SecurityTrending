@@ -240,7 +240,7 @@ namespace CommandLine
                 Price = price,
             };
 
-            database.SetPrice(quote);
+            database.SaveQuote(quote);
         }
         /// <summary>
         /// update the prices in the database
@@ -254,7 +254,7 @@ namespace CommandLine
             foreach (string symbol in symbols)
             {
                 Quote quote = quoteFeed.GetQuote(symbol);
-                database.SetPrice(quote);
+                database.SaveQuote(quote);
             }
         }
         /// <summary>

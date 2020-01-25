@@ -2,6 +2,7 @@
 using Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using static Core.TransactionEnums;
 
@@ -44,10 +45,50 @@ namespace Database
             ExecuteNonQuery(sql);
         }
         /// <summary>
+        /// get 
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <returns></returns>
+        public Quote GetLastQuote(string symbol)
+        {
+            Quote quote = new Quote
+            {
+                Symbol = symbol,
+            };
+
+            using (SQLiteConnection connection = OpenConnection())
+            {
+                using (SQLiteCommand command = new SQLiteCommand(connection))
+                {
+                    command.Parameters.Add("@symbol", DbType.String).Value = symbol;
+                    command.CommandText = GET_PRICE_SQL;
+
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            quote.Date = DateTime.Parse((string)reader["DateTime"]);
+                            quote.Price = (decimal)reader["Price"];
+                        }
+                    }
+                }
+            }
+
+                return quote;
+        }
+        /// <summary>
+        /// deprecated. Call SaveQuote instead
+        /// </summary>
+        /// <param name="quote"></param>
+        public void SetPrice(Quote quote)
+        {
+            SaveQuote(quote);
+        }
+        /// <summary>
         /// Insert a price into the database
         /// </summary>
         /// <param name="quote">quote with at least symbol, date, and price</param>
-        public void SetPrice(Quote quote)
+        public void SaveQuote(Quote quote)
         {
             using (SQLiteConnection connection = OpenConnection())
             {
@@ -124,6 +165,42 @@ namespace Database
             }
 
             return position;
+        }
+        /// <summary>
+        /// get the positions in the portfolio
+        /// </summary>
+        /// <returns>list of positions</returns>
+        public List<Position> GetPositions()
+        {
+            List<Position> positions = new List<Position>();
+
+            using (SQLiteConnection connection = OpenConnection())
+            {
+                using (SQLiteCommand command = new SQLiteCommand(GET_POSITIONS_SQL, connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+
+                        while (reader.Read())
+                        {
+                            string symbol = (string)reader["Symbol"];
+                            long classID = (long)reader["ClassID"];
+                            decimal quantity = (decimal)reader["Quantity"];
+
+                            Position position = new Position()
+                            {
+                                Symbol = symbol,
+                                Class = (TransactionClass)classID,
+                                Quantity = (double)quantity,
+                            };
+
+                            positions.Add(position);
+                        }
+                    }
+                }
+            }
+
+            return positions;
         }
         /// <summary>
         /// set one position into the database
@@ -270,6 +347,15 @@ namespace Database
             return string.Format("select ClassID, Quantity from Positions where Symbol='{0}'", symbol);
         }
         /// <summary>
+        /// get SQL statement to get the last price for a symbol and its timestamp stored in the database
+        /// </summary>
+        /// <param name="symbol">symbol</param>
+        /// <returns>SQL statement</returns>
+        private string GetPriceSql(string symbol)
+        {
+            return string.Format("select DateTime, Price from LastPrice where Symbol='{0}'", symbol);
+        }
+        /// <summary>
         /// get SQL statement to update a position in the database
         /// </summary>
         /// <param name="position">position</param>
@@ -324,10 +410,23 @@ Price numeric not null,
 primary key(Symbol)
 );";
         /// <summary>
-        /// SQL query to select the symbols in the last price table
+        /// SQL query to select the sysmbols for all positions
         /// </summary>
         private const string GET_SYMBOLS_SQL = @"
 select Symbol
 from Positions;";
+        /// <summary>
+        /// SQL query to get all positions
+        /// </summary>
+        private const string GET_POSITIONS_SQL = @"
+select Symbol, ClassID, Quantity
+from Positions;";
+        /// <summary>
+        /// SQL query to get the last price for a symbol. @symbol needs to be replaced by a command parameter.
+        /// </summary>
+        private const string GET_PRICE_SQL = @"
+select DateTime, Price
+from LastPrice
+where Symbol=@symbol;";
     }
 }

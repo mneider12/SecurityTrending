@@ -169,6 +169,7 @@ namespace LogicTests
             File.Delete("database.sqlite");
         }
         #region private helper methods
+
         /// <summary>
         /// verify that an expected position matches the same position in the database
         /// </summary>
@@ -177,19 +178,9 @@ namespace LogicTests
         private void VerifyPosition(IDatabase database, Position expectedPosition)
         {
             Position actualPosition = database.GetPosition(expectedPosition.Symbol);
-            AssertAreEqual(expectedPosition, actualPosition);
+            Assert.AreEqual(expectedPosition, actualPosition);
         }
-        /// <summary>
-        /// Assert that two positions are equal
-        /// </summary>
-        /// <param name="expectedPosition">expected position</param>
-        /// <param name="actualPosition">actual position</param>
-        private void AssertAreEqual(Position expectedPosition, Position actualPosition)
-        {
-            Assert.AreEqual(expectedPosition.Symbol, actualPosition.Symbol);
-            Assert.AreEqual(expectedPosition.Class, actualPosition.Class);
-            Assert.AreEqual(expectedPosition.Quantity, actualPosition.Quantity);
-        }
+
         #endregion
     }
 }

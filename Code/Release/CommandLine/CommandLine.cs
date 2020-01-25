@@ -10,7 +10,7 @@ namespace CommandLine
     /// <summary>
     /// Entry point for the command line application
     /// </summary>
-    public class CommandLine
+    public static class CommandLine
     {
         /// <summary>
         /// entry point for the command line application.

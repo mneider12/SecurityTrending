@@ -56,15 +56,15 @@ namespace CommandLine
         /// </summary>
         private static void ShowMenu()
         {
-            Console.WriteLine("Select an option");
+            Console.WriteLine(Resources.SelectAnOptionPrompt);
 
-            WriteChoice(Choice.Create, "Create database");
-            WriteChoice(Choice.NewTransaction, "New transaction");
-            WriteChoice(Choice.SetAPIKey, "Set API key");
-            WriteChoice(Choice.GetQuote, "Get quote");
-            WriteChoice(Choice.SetPrice, "Set price");
-            WriteChoice(Choice.UpdatePrices, "Update prices");
-            WriteChoice(Choice.Quit, "Quit");
+            WriteChoice(Choice.Create, Resources.CreateDatabaseOption);
+            WriteChoice(Choice.NewTransaction, Resources.NewTransactionOption);
+            WriteChoice(Choice.SetAPIKey, Resources.SetAPIKeyOption);
+            WriteChoice(Choice.GetQuote, Resources.GetQuoteOption);
+            WriteChoice(Choice.SetPrice, Resources.SetPriceOption);
+            WriteChoice(Choice.UpdatePrices, Resources.UpdatePricesOption);
+            WriteChoice(Choice.Quit, Resources.QuitOption);
         }
         /// <summary>
         /// write out one choice in a menu

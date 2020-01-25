@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Xml.Serialization;
 using Core;
-using Newtonsoft.Json.Linq;
 
 namespace DataFeed
 {

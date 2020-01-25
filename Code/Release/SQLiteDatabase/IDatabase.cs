@@ -21,10 +21,22 @@ namespace Database
         /// <param name="transaction">transaction to add</param>
         void NewTransaction(Transaction transaction);
         /// <summary>
-        /// Add a price to the database
+        /// Add a quote to the database
         /// </summary>
         /// <param name="quote">a quote with the price, symbol, and date minimally set</param>
+        void SaveQuote(Quote quote);
+        /// <summary>
+        /// deprecated. Use SaveQuote instead
+        /// </summary>
+        /// <param name="quote"></param>
+        [Obsolete("Use SaveQuote instead")]
         void SetPrice(Quote quote);
+        /// <summary>
+        /// get the latest quote stored in the database
+        /// </summary>
+        /// <param name="symbol">symbol</param>
+        /// <returns>latest price stored in the database</returns>
+        Quote GetLastQuote(string symbol);
         /// <summary>
         /// get a list of the symbols relevant to a portfolio
         /// </summary>
@@ -36,6 +48,11 @@ namespace Database
         /// <param name="symbol">symbol for position to retrieve</param>
         /// <returns>position</returns>
         Position GetPosition(string symbol);
+        /// <summary>
+        /// get the positions in the portfolio
+        /// </summary>
+        /// <returns>list of positions</returns>
+        List<Position> GetPositions();
         /// <summary>
         /// set a position into the database
         /// </summary>

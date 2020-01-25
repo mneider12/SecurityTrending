@@ -125,6 +125,10 @@
     <value>Amount:</value>
     <comment>prompt for an amount</comment>
   </data>
+  <data name="APIKeyPrompt" xml:space="preserve">
+    <value>API Key:</value>
+    <comment>prompt for an API key</comment>
+  </data>
   <data name="ClassPrompt" xml:space="preserve">
     <value>Class:</value>
     <comment>prompt for a class</comment>
@@ -145,6 +149,10 @@
     <value>New transaction</value>
     <comment>Option to create a new transaction manually</comment>
   </data>
+  <data name="PricePrompt" xml:space="preserve">
+    <value>Price:</value>
+    <comment>prompt for a price</comment>
+  </data>
   <data name="QuitOption" xml:space="preserve">
     <value>Quit</value>
     <comment>option to quit the program</comment>
@@ -161,8 +169,8 @@
     <value>Set price</value>
     <comment>option to set a price</comment>
   </data>
-  <data name="TickerPrompt" xml:space="preserve">
-    <value>Ticker:</value>
+  <data name="SymbolPrompt" xml:space="preserve">
+    <value>Symbol</value>
     <comment>prompt for a ticker</comment>
   </data>
   <data name="TransactionIDPrompt" xml:space="preserve">

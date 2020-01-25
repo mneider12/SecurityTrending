@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DataFeed\DataFeed.csproj" />
     <ProjectReference Include="..\SQLiteDatabase\Database.csproj" />
   </ItemGroup>

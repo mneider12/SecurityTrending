@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Core;
 using Database;
 using DataFeed;
@@ -10,7 +11,7 @@ namespace CommandLine
     /// <summary>
     /// Entry point for the command line application
     /// </summary>
-    public static class CommandLine
+    public static class CommandLineMain
     {
         /// <summary>
         /// entry point for the command line application.
@@ -73,7 +74,7 @@ namespace CommandLine
         /// <param name="text">text to display</param>
         private static void WriteChoice(Choice choice, string text)
         {
-            string display = string.Format("\t[{0}] {1}", (int)choice, text);
+            string display = string.Format(CultureInfo.CurrentCulture, "\t[{0}] {1}", (int)choice, text);
             Console.WriteLine(display);
         }
         /// <summary>

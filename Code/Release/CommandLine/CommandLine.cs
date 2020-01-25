@@ -46,14 +46,8 @@ namespace CommandLine
                     string input = Console.ReadLine();
                     choice = GetChoiceFromInput(input);
                 } while (choice == Choice.Invalid);
-                try
-                {
-                    RunChoice(choice, database, quoteFeed);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
+                
+                RunChoice(choice, database, quoteFeed);
 
             } while (choice != Choice.Quit);
         }

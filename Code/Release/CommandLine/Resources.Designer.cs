@@ -61,11 +61,56 @@ namespace CommandLine {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Action:.
+        /// </summary>
+        internal static string ActionPrompt {
+            get {
+                return ResourceManager.GetString("ActionPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amount:.
+        /// </summary>
+        internal static string AmountPrompt {
+            get {
+                return ResourceManager.GetString("AmountPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API Key:.
+        /// </summary>
+        internal static string APIKeyPrompt {
+            get {
+                return ResourceManager.GetString("APIKeyPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class:.
+        /// </summary>
+        internal static string ClassPrompt {
+            get {
+                return ResourceManager.GetString("ClassPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create database.
         /// </summary>
         internal static string CreateDatabaseOption {
             get {
                 return ResourceManager.GetString("CreateDatabaseOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date:.
+        /// </summary>
+        internal static string DatePrompt {
+            get {
+                return ResourceManager.GetString("DatePrompt", resourceCulture);
             }
         }
         
@@ -84,6 +129,15 @@ namespace CommandLine {
         internal static string NewTransactionOption {
             get {
                 return ResourceManager.GetString("NewTransactionOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Price:.
+        /// </summary>
+        internal static string PricePrompt {
+            get {
+                return ResourceManager.GetString("PricePrompt", resourceCulture);
             }
         }
         
@@ -120,6 +174,24 @@ namespace CommandLine {
         internal static string SetPriceOption {
             get {
                 return ResourceManager.GetString("SetPriceOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symbol.
+        /// </summary>
+        internal static string SymbolPrompt {
+            get {
+                return ResourceManager.GetString("SymbolPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transaction ID:.
+        /// </summary>
+        internal static string TransactionIDPrompt {
+            get {
+                return ResourceManager.GetString("TransactionIDPrompt", resourceCulture);
             }
         }
         

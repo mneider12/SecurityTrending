@@ -145,42 +145,42 @@ namespace CommandLine
             Transaction transaction = new Transaction();
             string input;
 
-            Console.WriteLine("Transaction ID:");
+            Console.WriteLine(Resources.TransactionIDPrompt);
             input = Console.ReadLine();
             if (int.TryParse(input, out int transactionID))
             {
                 transaction.TransactionID = transactionID;
             }
 
-            Console.WriteLine("Date:");
+            Console.WriteLine(Resources.DatePrompt);
             input = Console.ReadLine();
             if (DateTime.TryParse(input, out DateTime date))
             {
                 transaction.Date = date;
             }
 
-            Console.WriteLine("Action:");
+            Console.WriteLine(Resources.ActionPrompt);
             input = Console.ReadLine();
             if (Enum.TryParse(input, out TransactionAction action) && Enum.IsDefined(typeof(TransactionAction), action))
             {
                 transaction.Action = action;
             }
 
-            Console.WriteLine("Class:");
+            Console.WriteLine(Resources.ClassPrompt);
             input = Console.ReadLine();
             if (Enum.TryParse(input, out TransactionClass transactionClass) && Enum.IsDefined(typeof(TransactionClass), transactionClass))
             {
                 transaction.Class = transactionClass;
             }
 
-            Console.WriteLine("Ticker:");
+            Console.WriteLine(Resources.SymbolPrompt);
             input = Console.ReadLine();
             if (input.Length > 0)
             {
                 transaction.Symbol = input;
             }
 
-            Console.WriteLine("Amount:");
+            Console.WriteLine(Resources.AmountPrompt);
             input = Console.ReadLine();
             if (decimal.TryParse(input, out decimal amount))
             {
@@ -195,7 +195,7 @@ namespace CommandLine
         /// <param name="quoteFeed"></param>
         private static void SetAPIKey(IAPIKeyQuoteFeed quoteFeed)
         {
-            Console.WriteLine("APIKey:");
+            Console.WriteLine(Resources.APIKeyPrompt);
             quoteFeed.APIKey = Console.ReadLine();
         }
         /// <summary>
@@ -204,7 +204,7 @@ namespace CommandLine
         /// <param name="quoteFeed"></param>
         private static void GetQuote(IAPIKeyQuoteFeed quoteFeed)
         {
-            Console.WriteLine("Ticker:");
+            Console.WriteLine(Resources.SymbolPrompt);
             string ticker = Console.ReadLine();
 
             Quote quote = quoteFeed.GetQuote(ticker);
@@ -217,16 +217,16 @@ namespace CommandLine
         /// <param name="database">database connection</param>
         private static void SetPrice(IDatabase database)
         {
-            Console.WriteLine("Symbol:");
+            Console.WriteLine(Resources.SymbolPrompt);
             string symbol = Console.ReadLine();
 
-            Console.WriteLine("Date:");
+            Console.WriteLine(Resources.DatePrompt);
             string input = Console.ReadLine();
-            DateTime.TryParse(input, out DateTime date);
+            DateTime date = DateTime.Parse(input, CultureInfo.CurrentCulture);
 
-            Console.WriteLine("Price:");
+            Console.WriteLine(Resources.PricePrompt);
             input = Console.ReadLine();
-            decimal.TryParse(input, out decimal price);
+            decimal price = decimal.Parse(input,CultureInfo.CurrentCulture);
 
             Quote quote = new Quote()
             {

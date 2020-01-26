@@ -76,16 +76,5 @@ namespace Logic
 
             return !hasError;
         }
-        /// <summary>
-        /// attempted operation violates a business logic rule
-        /// </summary>
-        public class LogicException : Exception 
-        {
-            /// <summary>
-            /// pass a message with the exception
-            /// </summary>
-            /// <param name="message">error message</param>
-            public LogicException(string message) : base(message) { }
-        }
     }
 }

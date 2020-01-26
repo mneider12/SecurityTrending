@@ -231,7 +231,7 @@ namespace Database
         /// Get an open database connection. Caller is responsible for disposing the connection.
         /// </summary>
         /// <returns>connection</returns>
-        private SQLiteConnection OpenConnection()
+        private static SQLiteConnection OpenConnection()
         {
             SQLiteConnection connection = new SQLiteConnection("Data Source=database.sqlite");
             connection.Open();

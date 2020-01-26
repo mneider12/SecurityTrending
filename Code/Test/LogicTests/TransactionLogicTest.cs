@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Core;
 using Database;
+using Logic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model;
 using static Core.TransactionEnums;

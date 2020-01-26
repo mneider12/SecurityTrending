@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Globalization;
 using static Core.TransactionEnums;
 
 namespace Database
@@ -41,8 +42,11 @@ namespace Database
         /// <param name="transaction">transaction to add</param>
         public void NewTransaction(Transaction transaction)
         {
-            string sql = GetInsertTransactionSql(transaction);
-            ExecuteNonQuery(sql);
+            if (transaction != null)
+            {
+                string sql = GetInsertTransactionSql(transaction);
+                ExecuteNonQuery(sql);
+            }
         }
         /// <summary>
         /// get 
@@ -67,7 +71,7 @@ namespace Database
                     {
                         if (reader.Read())
                         {
-                            quote.Date = DateTime.Parse((string)reader["DateTime"]);
+                            quote.Date = DateTime.Parse((string)reader["DateTime"], CultureInfo.InvariantCulture);
                             quote.Price = (decimal)reader["Price"];
                         }
                     }
@@ -90,22 +94,29 @@ namespace Database
         /// <param name="quote">quote with at least symbol, date, and price</param>
         public void SaveQuote(Quote quote)
         {
-            using (SQLiteConnection connection = OpenConnection())
+            if (quote != null)
             {
-                using (SQLiteTransaction transaction = connection.BeginTransaction())
+                using (SQLiteConnection connection = OpenConnection())
                 {
-                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    using (SQLiteTransaction transaction = connection.BeginTransaction())
                     {
-                        command.CommandText = GetUpdatePriceSql(quote);
-                        if (command.ExecuteNonQuery() == 0)
+                        using (SQLiteCommand command = new SQLiteCommand(connection))
                         {
-                            command.CommandText = GetInsertPriceSql(quote);
-                            command.ExecuteNonQuery();
+                            command.Parameters.Add("@date", DbType.String).Value = quote.Date.ToString(CultureInfo.InvariantCulture);
+                            command.Parameters.Add("@price", DbType.Decimal).Value = quote.Price;
+                            command.Parameters.Add("@symbol", DbType.String).Value = quote.Symbol;
+                            command.CommandText = "update LastPrice set DateTime=@date, Price=@price where Symbol=@symbol";
+
+                            if (command.ExecuteNonQuery() == 0)
+                            {
+                                command.CommandText = GetInsertPriceSql(quote);
+                                command.ExecuteNonQuery();
+                            }
                         }
+                        transaction.Commit();
                     }
-                    transaction.Commit();
+                    connection.Close();
                 }
-                connection.Close();
             }
         }
         /// <summary>
@@ -301,7 +312,7 @@ namespace Database
         /// </summary>
         /// <param name="connection">database connection</param>
         /// <param name="sql">SQL to execute</param>
-        private void ExecuteNonQuery(string sql, SQLiteConnection connection)
+        private static void ExecuteNonQuery(string sql, SQLiteConnection connection)
         {
             using (SQLiteCommand command = new SQLiteCommand(sql, connection))
             {

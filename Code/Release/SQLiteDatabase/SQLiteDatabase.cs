@@ -109,7 +109,7 @@ namespace Database
 
                             if (command.ExecuteNonQuery() == 0)
                             {
-                                command.CommandText = GetInsertPriceSql(quote);
+                                command.CommandText = "insert into LastPrice values (@symbol, @date, @price);";
                                 command.ExecuteNonQuery();
                             }
                         }
@@ -155,12 +155,13 @@ namespace Database
             {
                 Symbol = symbol,
             };
-            string sql = GetPositionSql(symbol);
 
             using (SQLiteConnection connection = OpenConnection())
             {
-                using (SQLiteCommand command = new SQLiteCommand(sql, connection))
+                using (SQLiteCommand command = new SQLiteCommand(connection))
                 {
+                    command.Parameters.Add("@symbol", DbType.String).Value = symbol;
+                    command.CommandText = "select ClassID, Quantity from Positions where Symbol=@symbol;";
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
@@ -219,22 +220,28 @@ namespace Database
         /// <param name="position">position</param>
         public void SetPosition(Position position)
         {
-            using (SQLiteConnection connection = OpenConnection())
+            if (position != null)
             {
-                using (SQLiteTransaction transaction = connection.BeginTransaction())
+                using (SQLiteConnection connection = OpenConnection())
                 {
-                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    using (SQLiteTransaction transaction = connection.BeginTransaction())
                     {
-                        command.CommandText = GetUpdatePositionSql(position);
-                        if (command.ExecuteNonQuery() == 0)
+                        using (SQLiteCommand command = new SQLiteCommand(connection))
                         {
-                            command.CommandText = GetInsertPositionSql(position);
-                            command.ExecuteNonQuery();
+                            command.Parameters.Add("@quantity", DbType.Decimal).Value = position.Quantity;
+                            command.Parameters.Add("@symbol", DbType.String).Value = position.Symbol;
+                            command.CommandText = "update Positions set Quantity=@quantity where Symbol=@symbol;";
+                            if (command.ExecuteNonQuery() == 0)
+                            {
+                                command.Parameters.Add("@class", DbType.Int32).Value = position.Class;
+                                command.CommandText = "insert into Positions values (@symbol, @class, @quantity);";
+                                command.ExecuteNonQuery();
+                            }
                         }
+                        transaction.Commit();
                     }
-                    transaction.Commit();
+                    connection.Close();
                 }
-                connection.Close();
             }
         }
         #endregion
@@ -281,18 +288,22 @@ namespace Database
         /// <param name="tableName">table name</param>
         /// <param name="singularOfTableName">singular of the table name</param>
         /// <param name="values">values to insert into the table</param>
-        private void CreateCategoryNameTable(SQLiteConnection connection, string tableName, string singularOfTableName, (int, string)[] values)
+        private static void CreateCategoryNameTable(SQLiteConnection connection, string tableName, string singularOfTableName, (int, string)[] values)
         {
-            string createSql = string.Format("create table \"{0}\" (" +
-                                                    "\"{1}ID\" integer," +
-                                                    "\"Name\" text not null," +
-                                                    "primary key(\"{1}ID\")" +
-                                                    ");", tableName, singularOfTableName);
-            ExecuteNonQuery(createSql, connection);
+            
+            using (SQLiteCommand command = new SQLiteCommand(connection))
+            {
+                string createSql = string.Format(CultureInfo.InvariantCulture, "create table \"{0}\" (" +
+                                                         "\"{1}ID\" integer," +
+                                                        "\"Name\" text not null," +
+                                                       "primary key(\"{1}ID\")" +
+                                                      ");", tableName, singularOfTableName);
+                ExecuteNonQuery(createSql, connection);
+            }
 
             foreach ((int, string) value in values)
             {
-                string insertSql = string.Format("insert into {0} ({1}ID, Name) values ({2}, '{3}')", tableName, singularOfTableName, value.Item1, value.Item2);
+                string insertSql = string.Format(CultureInfo.InvariantCulture, "insert into {0} ({1}ID, Name) values ({2}, '{3}')", tableName, singularOfTableName, value.Item1, value.Item2);
                 ExecuteNonQuery(insertSql, connection);
             }
         }

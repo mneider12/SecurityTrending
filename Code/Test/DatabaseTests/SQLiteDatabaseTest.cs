@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Globalization;
 using System.IO;
 using Core;
 using Database;
@@ -65,7 +66,7 @@ namespace DatabaseTests
             reader.Read();
 
             Assert.AreEqual(1L, reader["TransactionID"]);
-            Assert.AreEqual(new DateTime(2000, 1, 1).ToString(), reader["Date"]);
+            Assert.AreEqual(new DateTime(2000, 1, 1).ToString(CultureInfo.InvariantCulture), reader["Date"]);
             Assert.AreEqual((long)TransactionAction.buy, reader["ActionID"]);
             Assert.AreEqual((long)TransactionClass.stock, reader["ClassID"]);
             Assert.AreEqual("AMZN", reader["Symbol"]);

@@ -44,8 +44,23 @@ namespace Database
         {
             if (transaction != null)
             {
-                string sql = GetInsertTransactionSql(transaction);
-                ExecuteNonQuery(sql);
+                using (SQLiteConnection connection = OpenConnection())
+                {
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = "insert into Transactions values (@transactionID, @date, @action, @class, @symbol, @amount, @quantity);";
+                        
+                        command.Parameters.Add("@transactionID", DbType.Int32).Value = transaction.TransactionID;
+                        command.Parameters.Add("@date", DbType.String).Value = transaction.Date.ToString(CultureInfo.InvariantCulture);
+                        command.Parameters.Add("@action", DbType.Int32).Value = transaction.Action;
+                        command.Parameters.Add("@class", DbType.Int32).Value = transaction.Class;
+                        command.Parameters.Add("@symbol", DbType.String).Value = transaction.Symbol;
+                        command.Parameters.Add("@amount", DbType.Currency).Value = transaction.Amount;
+                        command.Parameters.Add("@quantity", DbType.Double).Value = transaction.Quantity;
+
+                        command.ExecuteNonQuery();
+                    }
+                }
             }
         }
         /// <summary>

@@ -342,43 +342,6 @@ namespace Database
             }
         }
         /// <summary>
-        /// create a basic category ID / name table
-        /// </summary>
-        /// <param name="connection">database connection</param>
-        /// <param name="tableName">table name</param>
-        /// <param name="singularOfTableName">singular of the table name</param>
-        /// <param name="values">values to insert into the table</param>
-        private static void CreateCategoryNameTable(SQLiteConnection connection, string tableName, string singularOfTableName, (int, string)[] values)
-        {
-            
-            using (SQLiteCommand command = new SQLiteCommand(connection))
-            {
-                string createSql = string.Format(CultureInfo.InvariantCulture, "create table \"{0}\" (" +
-                                                         "\"{1}ID\" integer," +
-                                                        "\"Name\" text not null," +
-                                                       "primary key(\"{1}ID\")" +
-                                                      ");", tableName, singularOfTableName);
-                ExecuteNonQuery(createSql, connection);
-            }
-
-            foreach ((int, string) value in values)
-            {
-                string insertSql = string.Format(CultureInfo.InvariantCulture, "insert into {0} ({1}ID, Name) values ({2}, '{3}')", tableName, singularOfTableName, value.Item1, value.Item2);
-                ExecuteNonQuery(insertSql, connection);
-            }
-        }
-        /// <summary>
-        /// Execute a non query sequel statement on a new database connection
-        /// </summary>
-        /// <param name="sql">SQL to execute</param>
-        private void ExecuteNonQuery(string sql)
-        {
-            using (SQLiteConnection connection = OpenConnection())
-            {
-                ExecuteNonQuery(sql, connection);
-            }
-        }
-        /// <summary>
         /// Execute a non query sequel statement
         /// </summary>
         /// <param name="connection">database connection</param>

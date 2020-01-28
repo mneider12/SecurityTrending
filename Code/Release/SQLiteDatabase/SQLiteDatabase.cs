@@ -27,9 +27,16 @@ namespace Database
                 {
                     CreateActionsTable(connection);
                     CreateClassesTable(connection);
-                    ExecuteNonQuery(CREATE_TRANSACTIONS_SQL, connection);
-                    ExecuteNonQuery(CREATE_POSITIONS_SQL, connection);
-                    ExecuteNonQuery(CREATE_LAST_PRICE_SQL, connection);
+
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = CREATE_TRANSACTIONS_SQL;
+                        command.ExecuteNonQuery();
+                        command.CommandText = CREATE_POSITIONS_SQL;
+                        command.ExecuteNonQuery();
+                        command.CommandText = CREATE_LAST_PRICE_SQL;
+                        command.ExecuteNonQuery();
+                    }
 
                     transaction.Commit();
                 }
@@ -339,18 +346,6 @@ namespace Database
 
                     command.ExecuteNonQuery();
                 }
-            }
-        }
-        /// <summary>
-        /// Execute a non query sequel statement
-        /// </summary>
-        /// <param name="connection">database connection</param>
-        /// <param name="sql">SQL to execute</param>
-        private static void ExecuteNonQuery(string sql, SQLiteConnection connection)
-        {
-            using (SQLiteCommand command = new SQLiteCommand(sql, connection))
-            {
-                command.ExecuteNonQuery();
             }
         }
         /// <summary>

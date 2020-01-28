@@ -261,12 +261,35 @@ namespace Database
         /// <param name="connection">database connection</param>
         private void CreateActionsTable(SQLiteConnection connection)
         {
+            using (SQLiteCommand command = new SQLiteCommand(connection))
+            {
+                command.CommandText = "create table Actions (" +
+                    "ActionID integer," +
+                    "Name text not null," +
+                    "primary key(ActionID)" +
+                    ");";
+
+                command.ExecuteNonQuery();
+            }
+
             (int, string)[] values = new (int, string)[]
             {
                 (1, "buy"),
                 (2, "sell"),
             };
-            CreateCategoryNameTable(connection, "Actions", "Action", values);
+
+            using (SQLiteCommand command = new SQLiteCommand(connection))
+            {
+                command.CommandText = "insert into Actions (ActionID, Name) values (@actionID, @name)";
+                foreach ((int, string) value in values)
+                {
+                    command.Parameters.Add("@actionID", DbType.Int32).Value = value.Item1;
+                    command.Parameters.Add("@name", DbType.String).Value = value.Item2;
+
+                    command.ExecuteNonQuery();
+                }
+            }
+                
         }
         /// <summary>
         /// Create the Classes table
@@ -274,12 +297,34 @@ namespace Database
         /// <param name="connection">database connection</param>
         private void CreateClassesTable(SQLiteConnection connection)
         {
+            using (SQLiteCommand command = new SQLiteCommand(connection))
+            {
+                command.CommandText = "create table Classes (" +
+                    "ClassID integer," +
+                    "Name text not null," +
+                    "primary key(ClassID)" +
+                    ");";
+
+                command.ExecuteNonQuery();
+            }
+
             (int, string)[] values = new (int, string)[]
             {
                 (1, "cash"),
                 (2, "stock"),
             };
-            CreateCategoryNameTable(connection, "Classes", "Class", values);
+
+            using (SQLiteCommand command = new SQLiteCommand(connection))
+            {
+                command.CommandText = "insert into Classes (ClassID, Name) values (@classID, @name)";
+                foreach ((int, string) value in values)
+                {
+                    command.Parameters.Add("@classID", DbType.Int32).Value = value.Item1;
+                    command.Parameters.Add("@name", DbType.String).Value = value.Item2;
+
+                    command.ExecuteNonQuery();
+                }
+            }
         }
         /// <summary>
         /// create a basic category ID / name table

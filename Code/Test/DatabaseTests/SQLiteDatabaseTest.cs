@@ -96,6 +96,9 @@ namespace DatabaseTests
             Assert.AreEqual(expectedPosition.Class, actualPosition.Class);
             Assert.AreEqual(expectedPosition.Quantity, actualPosition.Quantity);
         }
+        /// <summary>
+        /// test the GetPositions function
+        /// </summary>
         [TestMethod]
         public void GetPositionsTest()
         {
@@ -182,7 +185,7 @@ namespace DatabaseTests
         /// </summary>
         /// <param name="reader">reader with table name in rows</param>
         /// <param name="expectedTableName">expected table name</param>
-        private void CheckNextTableName(SQLiteDataReader reader, string expectedTableName)
+        private static void CheckNextTableName(SQLiteDataReader reader, string expectedTableName)
         {
             reader.Read();
             Assert.AreEqual(expectedTableName, reader["name"]);

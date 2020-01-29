@@ -1,4 +1,5 @@
 ﻿using DataFeed;
+using System;
 using System.Collections.Generic;
 
 namespace DataFeedTest
@@ -11,7 +12,23 @@ namespace DataFeedTest
         /// <summary>
         /// don't need to dispose anything in mock
         /// </summary>
-        public void Dispose() { }
+        public void Dispose() 
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        /// <summary>
+        /// part of the dispose pattern. Finalizer can call this with disposing as false
+        /// </summary>
+        /// <param name="disposing">whether called from dispose (true) or finalizer (false)</param>
+        protected virtual void Dispose(bool disposing) { }
+        /// <summary>
+        /// destructor
+        /// </summary>
+        ~WebClientMock()
+        {
+            Dispose(false);
+        }
         /// <summary>
         /// return from a dictionary of set responses
         /// </summary>

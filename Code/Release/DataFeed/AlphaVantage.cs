@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -19,7 +20,7 @@ namespace DataFeed
         /// <returns>quote</returns>
         public Quote GetQuote(string ticker)
         {
-            string requesturl = string.Format("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={0}&apikey={1}",ticker, APIKey);
+            string requesturl = string.Format(CultureInfo.InvariantCulture, "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={0}&apikey={1}",ticker, APIKey);
             string jsonResponse = WebClient.DownloadString(requesturl);
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(AlphaVantageGlobalQuoteResponse));
             AlphaVantageGlobalQuoteResponse response;

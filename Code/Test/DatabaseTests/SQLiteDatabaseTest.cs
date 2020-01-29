@@ -125,7 +125,8 @@ namespace DatabaseTests
             };
 
             List<Position> actualPositions = database.GetPositions();
-            
+
+            CollectionAssert.AreEqual(expectedPositions, actualPositions);
 
         }
         /// <summary>

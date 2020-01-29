@@ -29,7 +29,7 @@ namespace DataFeed
                 response = (AlphaVantageGlobalQuoteResponse)serializer.ReadObject(stream);
             }
 
-            DateTime.TryParse(response.GlobalQuote.LatestTradingDay, out DateTime date);
+            DateTime date = DateTime.Parse(response.GlobalQuote.LatestTradingDay, CultureInfo.InvariantCulture);
 
             return new Quote()
             {

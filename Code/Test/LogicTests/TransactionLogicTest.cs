@@ -19,7 +19,7 @@ namespace LogicTests
         /// test committing new buy transactions
         /// </summary>
         [TestMethod]
-        public void CommitTransaction_Buy()
+        public void CommitTransactionBuy()
         {
             IDatabase database = new SQLiteDatabase();
             database.CreateDatabase();
@@ -58,7 +58,7 @@ namespace LogicTests
         /// test committing a sell transaction
         /// </summary>
         [TestMethod]
-        public void CommitTransaction_Sell_HasEnoughQuantity()
+        public void CommitTransactionSellHasEnoughQuantity()
         {
             IDatabase database = new SQLiteDatabase();
             database.CreateDatabase();
@@ -100,7 +100,7 @@ namespace LogicTests
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(LogicException))]
-        public void CommitTransaction_Sell_NotEnoughQuantity()
+        public void CommitTransactionSellNotEnoughQuantity()
         {
             IDatabase database = new SQLiteDatabase();
             database.CreateDatabase();
@@ -133,7 +133,7 @@ namespace LogicTests
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(LogicException))]
-        public void CommitTransaction_Buy_ChangeClassException()
+        public void CommitTransactionBuyChangeClassException()
         {
             IDatabase database = new SQLiteDatabase();
             database.CreateDatabase();

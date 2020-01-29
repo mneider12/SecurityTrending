@@ -253,7 +253,7 @@ namespace DatabaseTests
         /// check the metadata for the Class table
         /// </summary>
         /// <param name="connection">database connection</param>
-        private void CheckClassesTableInfo(SQLiteConnection connection)
+        private static void CheckClassesTableInfo(SQLiteConnection connection)
         {
             using SQLiteCommand command = new SQLiteCommand("pragma table_info(\"Classes\");", connection);
             using SQLiteDataReader reader = command.ExecuteReader();
@@ -323,7 +323,7 @@ namespace DatabaseTests
         /// <param name="notnull">expected value of notnull</param>
         /// <param name="dflt_value">expected default value</param>
         /// <param name="pk">expected value of primary key</param>
-        private void CheckNextColumn(SQLiteDataReader reader, long cid, string name, string type, long notnull, object dflt_value, long pk)
+        private static void CheckNextColumn(SQLiteDataReader reader, long cid, string name, string type, long notnull, object dflt_value, long pk)
         {
             reader.Read();
 

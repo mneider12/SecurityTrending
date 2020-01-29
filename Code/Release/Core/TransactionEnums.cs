@@ -1,6 +1,6 @@
 ﻿namespace Core
 {
-    public class TransactionEnums
+    public static class TransactionEnums
     {
         /// <summary>
         /// actions describe the transaction interaction with the cash account.

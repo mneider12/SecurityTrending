@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 using Core;
 
@@ -44,9 +45,12 @@ namespace DataFeed
         private void LoadAPIKey()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(string));
-            using (TextReader reader = new StreamReader(config_file))
+            using (FileStream stream = new FileStream(config_file, FileMode.Open))
             {
-                apiKey = (string) serializer.Deserialize(reader);
+                using (XmlReader reader = XmlReader.Create(stream))
+                {
+                    apiKey = (string)serializer.Deserialize(reader);
+                }
             }
         }
         /// <summary>
@@ -83,7 +87,7 @@ namespace DataFeed
         /// <summary>
         /// web client to use for web access
         /// </summary>
-        public IWebClient WebClient { private get; set; }
+        public IWebClient WebClient { get; set; }
         /// <summary>
         /// APIKey property backing
         /// </summary>

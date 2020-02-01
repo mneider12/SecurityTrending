@@ -49,15 +49,12 @@ namespace DataFeedTest
                 Symbol = ticker,
             };
 
-            IQuoteFeed quoteFeed;
+            IAPIKeyQuoteFeed quoteFeed;
 
             using (WebClientMock webClient = new WebClientMock() { Responses = responses })
             {
-                quoteFeed = new AlphaVantage()
-                {
-                    APIKey = "key",
-                    WebClient = webClient,
-                };
+                quoteFeed = new AlphaVantage(webClient);
+                quoteFeed.SetAPIKey("key");
             }
 
             Quote quote = quoteFeed.GetQuote(ticker);

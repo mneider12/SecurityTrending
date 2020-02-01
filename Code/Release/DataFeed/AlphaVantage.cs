@@ -15,6 +15,15 @@ namespace DataFeed
     public class AlphaVantage : IAPIKeyQuoteFeed
     {
         /// <summary>
+        /// create an instance of AlphaVantage
+        /// </summary>
+        /// <param name="webClient">client to use for web access</param>
+        public AlphaVantage(IWebClient webClient)
+        {
+            this.webClient = webClient;
+            LoadAPIKey();
+        }
+        /// <summary>
         /// get a quote for a ticker and date
         /// </summary>
         /// <param name="ticker">security ticker</param>
@@ -22,7 +31,7 @@ namespace DataFeed
         public Quote GetQuote(string ticker)
         {
             string requesturl = string.Format(CultureInfo.InvariantCulture, "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={0}&apikey={1}",ticker, APIKey);
-            string jsonResponse = WebClient.DownloadString(requesturl);
+            string jsonResponse = webClient.DownloadString(requesturl);
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(AlphaVantageGlobalQuoteResponse));
             AlphaVantageGlobalQuoteResponse response;
             using (MemoryStream stream = new MemoryStream(Encoding.Unicode.GetBytes(jsonResponse)))
@@ -39,6 +48,11 @@ namespace DataFeed
                 Symbol = response.GlobalQuote.Symbol,
             };
         }
+        public void SetAPIKey(string APIKey)
+        {
+            this.APIKey = APIKey;
+            SaveAPIKey();
+        }
         /// <summary>
         /// load the API key from disk
         /// </summary>
@@ -49,14 +63,15 @@ namespace DataFeed
             {
                 using (XmlReader reader = XmlReader.Create(stream))
                 {
-                    apiKey = (string)serializer.Deserialize(reader);
+                    APIKey = (string)serializer.Deserialize(reader);
                 }
             }
         }
         /// <summary>
         /// save the API Key to disk
         /// </summary>
-        private void SaveAPIKey()
+        /// <param name="APIKey">API key</param>
+        private  void SaveAPIKey()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(string));
             using (TextWriter writer = new StreamWriter(config_file))
@@ -65,33 +80,13 @@ namespace DataFeed
             }
         }
         /// <summary>
-        /// API Key
-        /// </summary>
-        public string APIKey
-        {
-            private get
-            {
-                if (apiKey == null)
-                {
-                    LoadAPIKey();
-                }
-
-                return apiKey;
-            }
-            set
-            {
-                apiKey = value;
-                SaveAPIKey();
-            }
-        }
-        /// <summary>
         /// web client to use for web access
         /// </summary>
-        public IWebClient WebClient { get; set; }
+        private readonly IWebClient webClient;
         /// <summary>
         /// APIKey property backing
         /// </summary>
-        private string apiKey;
+        private string APIKey;
         /// <summary>
         /// config file name
         /// </summary>

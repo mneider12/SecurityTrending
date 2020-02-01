@@ -12,6 +12,7 @@ namespace DataFeed
         /// <summary>
         /// API Key
         /// </summary>
-        string APIKey { set; }
+        /// <param name="APIKey">API key</param>
+        void SetAPIKey(string APIKey);
     }
 }

@@ -23,10 +23,7 @@ namespace CommandLine
             IDatabase database = new SQLiteDatabase();
             using (IWebClient webClient = new WebClient())
             {
-                IAPIKeyQuoteFeed quoteFeed = new AlphaVantage()
-                {
-                    WebClient = webClient,
-                };
+                IAPIKeyQuoteFeed quoteFeed = new AlphaVantage(webClient);
 
                 RunMenu(database, quoteFeed);
             }
@@ -196,7 +193,8 @@ namespace CommandLine
         private static void SetAPIKey(IAPIKeyQuoteFeed quoteFeed)
         {
             Console.WriteLine(Resources.APIKeyPrompt);
-            quoteFeed.APIKey = Console.ReadLine();
+            string APIKey = Console.ReadLine();
+            quoteFeed.SetAPIKey(APIKey);
         }
         /// <summary>
         /// Get the latest quote for a ticker

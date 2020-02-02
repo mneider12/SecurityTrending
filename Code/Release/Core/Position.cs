@@ -14,7 +14,7 @@ namespace Model
         /// <summary>
         /// Quantity in the position
         /// </summary>
-        public double Quantity { get; set; }
+        public decimal Quantity { get; set; }
         /// <summary>
         /// class of the position
         /// </summary>

@@ -86,7 +86,7 @@ namespace DatabaseTests
             {
                 Symbol = "TEST",
                 Class = TransactionClass.stock,
-                Quantity = 100.55,
+                Quantity = 100.55m,
             };
             database.SetPosition(expectedPosition);
 
@@ -199,7 +199,7 @@ namespace DatabaseTests
         /// Check the schema info for the actions table
         /// </summary>
         /// <param name="connection">database connection</param>
-        private void CheckActionsTableInfo(SQLiteConnection connection)
+        private static void CheckActionsTableInfo(SQLiteConnection connection)
         {
             using SQLiteCommand command = new SQLiteCommand("pragma table_info(\"Actions\");", connection);
             using SQLiteDataReader reader = command.ExecuteReader();
@@ -210,7 +210,7 @@ namespace DatabaseTests
         /// Check the data in the actions table
         /// </summary>
         /// <param name="connection">database connection</param>
-        private void CheckActionsTableData(SQLiteConnection connection)
+        private static void CheckActionsTableData(SQLiteConnection connection)
         {
             using SQLiteCommand command = new SQLiteCommand("select * from Actions;", connection);
             using SQLiteDataReader reader = command.ExecuteReader();

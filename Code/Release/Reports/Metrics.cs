@@ -1,4 +1,5 @@
-﻿using Database;
+﻿using Core;
+using Database;
 using Model;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -27,9 +28,9 @@ namespace Reports
             Contract.Requires(database != null);
             Contract.Requires(position != null);
 
-            decimal price = 0;
+            Quote lastQuote = database.GetLastQuote(position.Symbol);
 
-            return 0m;
+            return lastQuote.Price * position.Quantity;
         }
     }
 }

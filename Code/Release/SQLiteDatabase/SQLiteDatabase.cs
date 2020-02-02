@@ -192,7 +192,7 @@ namespace Database
                             decimal quantity = (decimal)reader["Quantity"];
 
                             position.Class = (TransactionClass)classID;
-                            position.Quantity = (double)quantity;
+                            position.Quantity = quantity;
                         }
                     }
                 }
@@ -225,7 +225,7 @@ namespace Database
                             {
                                 Symbol = symbol,
                                 Class = (TransactionClass)classID,
-                                Quantity = (double)quantity,
+                                Quantity = quantity,
                             };
 
                             positions.Add(position);

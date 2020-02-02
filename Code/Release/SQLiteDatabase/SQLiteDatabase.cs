@@ -56,7 +56,7 @@ namespace Database
                     using (SQLiteCommand command = new SQLiteCommand(connection))
                     {
                         command.CommandText = "insert into Transactions values (@transactionID, @date, @action, @class, @symbol, @amount, @quantity);";
-                        
+
                         command.Parameters.Add("@transactionID", DbType.Int32).Value = transaction.TransactionID;
                         command.Parameters.Add("@date", DbType.String).Value = transaction.Date.ToString(CultureInfo.InvariantCulture);
                         command.Parameters.Add("@action", DbType.Int32).Value = transaction.Action;
@@ -100,7 +100,7 @@ namespace Database
                 }
             }
 
-                return quote;
+            return quote;
         }
         /// <summary>
         /// deprecated. Call SaveQuote instead
@@ -155,7 +155,7 @@ namespace Database
                 {
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
-                        while(reader.Read())
+                        while (reader.Read())
                         {
                             symbols.Add(reader.GetString(0));
                         }
@@ -192,7 +192,7 @@ namespace Database
                             decimal quantity = (decimal)reader["Quantity"];
 
                             position.Class = (TransactionClass)classID;
-                            position.Quantity = (double) quantity;
+                            position.Quantity = (double)quantity;
                         }
                     }
                 }
@@ -311,7 +311,7 @@ namespace Database
                     command.ExecuteNonQuery();
                 }
             }
-                
+
         }
         /// <summary>
         /// Create the Classes table

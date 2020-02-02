@@ -1,6 +1,5 @@
 ﻿using Database;
 using Model;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
@@ -15,7 +14,7 @@ namespace Reports
             decimal value = 0m;
 
             List<Position> positions = database.GetPositions();
-            foreach(Position position in positions)
+            foreach (Position position in positions)
             {
                 value += PositionValue(database, position);
             }

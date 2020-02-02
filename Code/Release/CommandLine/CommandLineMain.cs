@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using Core;
+﻿using Core;
 using Database;
 using DataFeed;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 using static Core.TransactionEnums;
 
 namespace CommandLine
@@ -44,7 +44,7 @@ namespace CommandLine
                     string input = Console.ReadLine();
                     choice = GetChoiceFromInput(input);
                 } while (choice == Choice.Invalid);
-                
+
                 RunChoice(choice, database, quoteFeed);
 
             } while (choice != Choice.Quit);
@@ -90,7 +90,7 @@ namespace CommandLine
             else if (!int.TryParse(input, out int numericInput))
             {
                 choice = Choice.Invalid;
- 
+
             }
             else if (Enum.IsDefined(typeof(Choice), numericInput))
             {
@@ -224,7 +224,7 @@ namespace CommandLine
 
             Console.WriteLine(Resources.PricePrompt);
             input = Console.ReadLine();
-            decimal price = decimal.Parse(input,CultureInfo.CurrentCulture);
+            decimal price = decimal.Parse(input, CultureInfo.CurrentCulture);
 
             Quote quote = new Quote()
             {

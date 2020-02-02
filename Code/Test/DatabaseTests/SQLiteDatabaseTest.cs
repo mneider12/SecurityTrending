@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Core;
+using Database;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Globalization;
 using System.IO;
-using Core;
-using Database;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Model;
 using static Core.TransactionEnums;
 
 namespace DatabaseTests
@@ -168,17 +168,13 @@ namespace DatabaseTests
         /// <param name="connection">database connection</param>
         private void CheckTableNames(SQLiteConnection connection)
         {
-            using (SQLiteCommand command = new SQLiteCommand("select name from sqlite_master order by name;", connection))
-            {
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    CheckNextTableName(reader, "Actions");
-                    CheckNextTableName(reader, "Classes");
-                    CheckNextTableName(reader, "LastPrice");
-                    CheckNextTableName(reader, "Positions");
-                    CheckNextTableName(reader, "Transactions");
-                }
-            }
+            using SQLiteCommand command = new SQLiteCommand("select name from sqlite_master order by name;", connection);
+            using SQLiteDataReader reader = command.ExecuteReader();
+            CheckNextTableName(reader, "Actions");
+            CheckNextTableName(reader, "Classes");
+            CheckNextTableName(reader, "LastPrice");
+            CheckNextTableName(reader, "Positions");
+            CheckNextTableName(reader, "Transactions");
         }
         /// <summary>
         /// Check that the next table name in a reader matches the expected table name
@@ -196,30 +192,37 @@ namespace DatabaseTests
         /// <param name="connection">database connection</param>
         private void CheckActionsTable(SQLiteConnection connection)
         {
-            using (SQLiteCommand command = new SQLiteCommand("pragma table_info(\"Actions\");", connection))
-            {
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    CheckNextColumn(reader, 0, "ActionID", "integer", 0, DBNull.Value, 1);
-                    CheckNextColumn(reader, 1, "Name", "text", 1, DBNull.Value, 0);
-                }
-            }
+            CheckActionsTableInfo(connection);
+            CheckActionsTableData(connection);
+        }
+        /// <summary>
+        /// Check the schema info for the actions table
+        /// </summary>
+        /// <param name="connection">database connection</param>
+        private void CheckActionsTableInfo(SQLiteConnection connection)
+        {
+            using SQLiteCommand command = new SQLiteCommand("pragma table_info(\"Actions\");", connection);
+            using SQLiteDataReader reader = command.ExecuteReader();
+            CheckNextColumn(reader, 0, "ActionID", "integer", 0, DBNull.Value, 1);
+            CheckNextColumn(reader, 1, "Name", "text", 1, DBNull.Value, 0);
+        }
+        /// <summary>
+        /// Check the data in the actions table
+        /// </summary>
+        /// <param name="connection">database connection</param>
+        private void CheckActionsTableData(SQLiteConnection connection)
+        {
+            using SQLiteCommand command = new SQLiteCommand("select * from Actions;", connection);
+            using SQLiteDataReader reader = command.ExecuteReader();
+            reader.Read();
 
-            using (SQLiteCommand command = new SQLiteCommand("select * from Actions;", connection))
-            {
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    reader.Read();
+            Assert.AreEqual(1L, reader["ActionID"]);
+            Assert.AreEqual("buy", reader["Name"]);
 
-                    Assert.AreEqual(1L, reader["ActionID"]);
-                    Assert.AreEqual("buy", reader["Name"]);
+            reader.Read();
 
-                    reader.Read();
-
-                    Assert.AreEqual(2L, reader["ActionID"]);
-                    Assert.AreEqual("sell", reader["Name"]);
-                }
-            }
+            Assert.AreEqual(2L, reader["ActionID"]);
+            Assert.AreEqual("sell", reader["Name"]);
         }
         /// <summary>
         /// Check the Classes table metadata
@@ -267,19 +270,16 @@ namespace DatabaseTests
         /// <param name="connection">database connection</param>
         private void CheckTransactionsTable(SQLiteConnection connection)
         {
-            using (SQLiteCommand command = new SQLiteCommand("pragma table_info(Transactions);", connection))
-            {
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    CheckNextColumn(reader, 0, "TransactionID", "integer", 0, DBNull.Value, 1);
-                    CheckNextColumn(reader, 1, "Date", "text", 1, DBNull.Value, 0);
-                    CheckNextColumn(reader, 2, "ActionID", "integer", 1, DBNull.Value, 0);
-                    CheckNextColumn(reader, 3, "ClassID", "integer", 1, DBNull.Value, 0);
-                    CheckNextColumn(reader, 4, "Symbol", "text", 0, DBNull.Value, 0);
-                    CheckNextColumn(reader, 5, "Amount", "numeric", 1, DBNull.Value, 0);
-                    CheckNextColumn(reader, 6, "Quantity", "numeric", 1, DBNull.Value, 0);
-                }
-            }
+            using SQLiteCommand command = new SQLiteCommand("pragma table_info(Transactions);", connection);
+            using SQLiteDataReader reader = command.ExecuteReader();
+
+            CheckNextColumn(reader, 0, "TransactionID", "integer", 0, DBNull.Value, 1);
+            CheckNextColumn(reader, 1, "Date", "text", 1, DBNull.Value, 0);
+            CheckNextColumn(reader, 2, "ActionID", "integer", 1, DBNull.Value, 0);
+            CheckNextColumn(reader, 3, "ClassID", "integer", 1, DBNull.Value, 0);
+            CheckNextColumn(reader, 4, "Symbol", "text", 0, DBNull.Value, 0);
+            CheckNextColumn(reader, 5, "Amount", "numeric", 1, DBNull.Value, 0);
+            CheckNextColumn(reader, 6, "Quantity", "numeric", 1, DBNull.Value, 0);
         }
         /// <summary>
         /// check the metadata of the last price table
@@ -287,15 +287,12 @@ namespace DatabaseTests
         /// <param name="connection">database connection</param>
         private void CheckLastPriceTable(SQLiteConnection connection)
         {
-            using (SQLiteCommand command = new SQLiteCommand(@"pragma table_info(LastPrice);", connection))
-            {
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    CheckNextColumn(reader, 0, "Symbol", "text", 0, DBNull.Value, 1);
-                    CheckNextColumn(reader, 1, "DateTime", "text", 1, DBNull.Value, 0);
-                    CheckNextColumn(reader, 2, "Price", "numeric", 1, DBNull.Value, 0);
-                }
-            }
+            using SQLiteCommand command = new SQLiteCommand(@"pragma table_info(LastPrice);", connection);
+            using SQLiteDataReader reader = command.ExecuteReader();
+
+            CheckNextColumn(reader, 0, "Symbol", "text", 0, DBNull.Value, 1);
+            CheckNextColumn(reader, 1, "DateTime", "text", 1, DBNull.Value, 0);
+            CheckNextColumn(reader, 2, "Price", "numeric", 1, DBNull.Value, 0);
         }
         /// <summary>
         /// check the metadata of the positions table
@@ -303,15 +300,12 @@ namespace DatabaseTests
         /// <param name="connection">database connection</param>
         private void CheckPositionsTable(SQLiteConnection connection)
         {
-            using (SQLiteCommand command = new SQLiteCommand(@"pragma table_info(Positions);", connection))
-            {
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    CheckNextColumn(reader, 0, "Symbol", "text", 0, DBNull.Value, 1);
-                    CheckNextColumn(reader, 1, "ClassID", "integer", 1, DBNull.Value, 0);
-                    CheckNextColumn(reader, 2, "Quantity", "numeric", 1, "0", 0);
-                }
-            }
+            using SQLiteCommand command = new SQLiteCommand(@"pragma table_info(Positions);", connection);
+            using SQLiteDataReader reader = command.ExecuteReader();
+
+            CheckNextColumn(reader, 0, "Symbol", "text", 0, DBNull.Value, 1);
+            CheckNextColumn(reader, 1, "ClassID", "integer", 1, DBNull.Value, 0);
+            CheckNextColumn(reader, 2, "Quantity", "numeric", 1, "0", 0);
         }
         /// <summary>
         /// Check the metadata of one column in a table 

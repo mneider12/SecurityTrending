@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DataFeed
+﻿namespace DataFeed
 {
     /// <summary>
     /// wrapper around the WebClient class 

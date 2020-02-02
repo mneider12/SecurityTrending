@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using Core;
 
 namespace DataFeed
 {
@@ -30,7 +30,7 @@ namespace DataFeed
         /// <returns>quote</returns>
         public Quote GetQuote(string ticker)
         {
-            string requesturl = string.Format(CultureInfo.InvariantCulture, "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={0}&apikey={1}",ticker, APIKey);
+            string requesturl = string.Format(CultureInfo.InvariantCulture, "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={0}&apikey={1}", ticker, APIKey);
             string jsonResponse = webClient.DownloadString(requesturl);
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(AlphaVantageGlobalQuoteResponse));
             AlphaVantageGlobalQuoteResponse response;
@@ -71,7 +71,7 @@ namespace DataFeed
         /// save the API Key to disk
         /// </summary>
         /// <param name="APIKey">API key</param>
-        private  void SaveAPIKey()
+        private void SaveAPIKey()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(string));
             using (TextWriter writer = new StreamWriter(config_file))

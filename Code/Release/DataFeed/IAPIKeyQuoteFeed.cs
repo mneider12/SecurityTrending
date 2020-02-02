@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DataFeed
+﻿namespace DataFeed
 {
     /// <summary>
     /// combined interface for a quote feed with a single API key

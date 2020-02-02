@@ -2,7 +2,6 @@
 using Database;
 using Model;
 using System;
-using System.Diagnostics.Contracts;
 using static Core.TransactionEnums;
 
 namespace Logic
@@ -49,7 +48,7 @@ namespace Logic
                 {
                     throw new LogicException(errorMessage);
                 }
-            } 
+            }
         }
         /// <summary>
         /// validate that a transaction is valid to apply to a position

@@ -1,9 +1,9 @@
-﻿using System.IO;
-using Core;
+﻿using Core;
 using Database;
 using Logic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model;
+using System.IO;
 using static Core.TransactionEnums;
 using static Logic.TransactionLogic;
 

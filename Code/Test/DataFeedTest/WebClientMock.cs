@@ -12,7 +12,7 @@ namespace DataFeedTest
         /// <summary>
         /// don't need to dispose anything in mock
         /// </summary>
-        public void Dispose() 
+        public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Core;
+﻿using Core;
 using DataFeed;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 
 namespace DataFeedTest
 {
@@ -21,7 +21,7 @@ namespace DataFeedTest
         {
             Dictionary<string, string> responses = new Dictionary<string, string>()
             {
-                {   
+                {
                     "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=key",
                         @"{
                             ""Global Quote"": {

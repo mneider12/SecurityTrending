@@ -51,8 +51,9 @@ namespace DataFeedTest
 
             IAPIKeyQuoteFeed quoteFeed;
 
-            using (WebClientMock webClient = new WebClientMock() { Responses = responses })
+            using (WebClientMock webClient = new WebClientMock())
             {
+                webClient.SetResponses(responses);
                 quoteFeed = new AlphaVantage(webClient);
                 quoteFeed.SetAPIKey("key");
             }

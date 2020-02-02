@@ -36,11 +36,16 @@ namespace DataFeedTest
         /// <returns></returns>
         public string DownloadString(string address)
         {
-            return Responses[address];
+            return responses[address];
         }
         /// <summary>
         /// set responses that should be returned by the mock
         /// </summary>
-        public Dictionary<string, string> Responses { private get; set; }
+        public void SetResponses(Dictionary<string, string> responses)
+        {
+            this.responses = responses;
+        }
+
+        private Dictionary<string, string> responses;
     }
 }

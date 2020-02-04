@@ -22,7 +22,12 @@ namespace Reports
 
             return value;
         }
-
+        /// <summary>
+        /// calculate the value of a single position
+        /// </summary>
+        /// <param name="database"></param>
+        /// <param name="position"></param>
+        /// <returns></returns>
         public static decimal PositionValue(IDatabase database, Position position)
         {
             Contract.Requires(database != null);

@@ -17,22 +17,19 @@ namespace ReportsTests
         /// test the zero state for position value
         /// </summary>
         [TestMethod]
+        [ExpectedException(typeof(NoQuoteAvailableException))]
         public void PositionValueZero()
         {
-            IDatabase database = new SQLiteDatabase();
-            database.CreateDatabase();
+            QuoteFeedMock quoteFeedMock = new QuoteFeedMock();
 
             Position position = new Position()
             {
                 Symbol = "test",
                 Quantity = 0,
-                Class = Core.TransactionEnums.TransactionClass.stock,
+                Class = TransactionEnums.TransactionClass.stock,
             };
 
-            decimal expectedPositionValue = 0m;
-            decimal actualPositionValue = Metrics.PositionValue(database, position);
-
-            Assert.AreEqual(expectedPositionValue, actualPositionValue);
+            Metrics.PositionValue(position, quoteFeedMock);
         }
         /// <summary>
         /// test the position value metric with a normal positive valued position
@@ -43,14 +40,16 @@ namespace ReportsTests
             IDatabase database = new SQLiteDatabase();
             database.CreateDatabase();
 
-            Quote lastQuote = new Quote()
+            QuoteFeedMock quoteFeedMock = new QuoteFeedMock();
+
+            Quote quote = new Quote()
             {
                 Date = new DateTime(2000, 1, 1),
                 Price = 50.00m,
                 Symbol = "test",
             };
 
-            database.SaveQuote(lastQuote);
+            quoteFeedMock.AddQuote(quote);
 
             Position position = new Position()
             {
@@ -60,7 +59,7 @@ namespace ReportsTests
             };
 
             decimal expectedPositionValue = 500m;
-            decimal actualPositionValue = Metrics.PositionValue(database, position);
+            decimal actualPositionValue = Metrics.PositionValue(position, quoteFeedMock);
 
             Assert.AreEqual(expectedPositionValue, actualPositionValue);
         }

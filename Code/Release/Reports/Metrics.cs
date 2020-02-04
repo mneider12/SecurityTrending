@@ -37,5 +37,14 @@ namespace Reports
 
             return lastQuote.Price * position.Quantity;
         }
+        public static decimal PositionValue(Position position, IQuoteFeed quoteFeed)
+        {
+            Contract.Requires(position != null);
+            Contract.Requires(quoteFeed != null);
+
+            Quote lastQuote = quoteFeed.GetQuote(position.Symbol);
+
+            return lastQuote.Price * position.Quantity;
+        }
     }
 }

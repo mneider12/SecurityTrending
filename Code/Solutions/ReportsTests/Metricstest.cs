@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core;
-using Database;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model;
 using Reports;
@@ -133,9 +132,6 @@ namespace ReportsTests
         [TestMethod]
         public void PositionValuePositive()
         {
-            IDatabase database = new SQLiteDatabase();
-            database.CreateDatabase();
-
             QuoteFeedMock quoteFeedMock = new QuoteFeedMock();
 
             Quote quote = new Quote()

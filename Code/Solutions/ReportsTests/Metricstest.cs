@@ -28,6 +28,42 @@ namespace ReportsTests
 
             Assert.AreEqual(expectedValue, actualValue);
         }
+        /// <summary>
+        /// test positions value for a single position
+        /// </summary>
+        [TestMethod]
+        public void PositionsValueOne()
+        {
+            Quote quote1 = new Quote()
+            {
+                Date = new DateTime(2000, 1, 1),
+                Price = 10m,
+                Symbol = "test1",
+            };
+
+            QuoteFeedMock quoteFeedMock = new QuoteFeedMock();
+            quoteFeedMock.AddQuote(quote1);
+
+            Position position1 = new Position()
+            {
+                Class = TransactionEnums.TransactionClass.stock,
+                Quantity = 5,
+                Symbol = "test1",
+            };
+
+            List<Position> positions = new List<Position>()
+            {
+                position1,
+            };
+
+            decimal expectedValue = 50m;
+            decimal actualValue = Metrics.PositionsValue(positions, quoteFeedMock);
+
+            Assert.AreEqual(expectedValue, actualValue);
+        }
+        /// <summary>
+        /// test a list of two positions
+        /// </summary>
         [TestMethod]
         public void PositionsValueTwo()
         {

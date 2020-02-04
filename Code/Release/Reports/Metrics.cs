@@ -7,22 +7,11 @@ using System.Linq;
 
 namespace Reports
 {
+    /// <summary>
+    /// metrics to report
+    /// </summary>
     public static class Metrics
     {
-        public static decimal PortfolioValue(IDatabase database)
-        {
-            Contract.Requires(database != null);
-
-            decimal value = 0m;
-
-            List<Position> positions = database.GetPositions();
-            foreach (Position position in positions)
-            {
-                value += PositionValue(database, position);
-            }
-
-            return value;
-        }
         /// <summary>
         /// get the value of a list of positions
         /// </summary>
@@ -36,20 +25,11 @@ namespace Reports
             return positions.Aggregate(0m, ( total, position) => total + PositionValue(position, quoteFeed));
         }
         /// <summary>
-        /// calculate the value of a single position
+        /// get the value of a single position
         /// </summary>
-        /// <param name="database"></param>
-        /// <param name="position"></param>
-        /// <returns></returns>
-        public static decimal PositionValue(IDatabase database, Position position)
-        {
-            Contract.Requires(database != null);
-            Contract.Requires(position != null);
-
-            Quote lastQuote = database.GetLastQuote(position.Symbol);
-
-            return lastQuote.Price * position.Quantity;
-        }
+        /// <param name="position">position</param>
+        /// <param name="quoteFeed">quote feed</param>
+        /// <returns>value</returns>
         public static decimal PositionValue(Position position, IQuoteFeed quoteFeed)
         {
             Contract.Requires(position != null);

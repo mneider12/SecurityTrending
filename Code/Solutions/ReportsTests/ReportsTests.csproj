@@ -68,10 +68,6 @@
       <Project>{1747DB05-1E12-4B42-BCE6-94EE91F967A0}</Project>
       <Name>Reports</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Release\SQLiteDatabase\Database.csproj">
-      <Project>{EDC2D5F8-A9C0-41F9-9FDF-F6CBB05E308B}</Project>
-      <Name>Database</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

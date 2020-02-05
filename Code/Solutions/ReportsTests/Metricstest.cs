@@ -14,24 +14,24 @@ namespace ReportsTests
     public class MetricsTest
     {
         /// <summary>
-        /// test an empty list of positions for positions value
+        /// test an empty list of positions for account value
         /// </summary>
         [TestMethod]
-        public void PositionsValueZero()
+        public void AccountValueZero()
         {
             QuoteFeedMock quoteFeedMock = new QuoteFeedMock();
-            List<Position> positions = new List<Position>();
+            Account account = new Account();
 
             decimal expectedValue = 0m;
-            decimal actualValue = Metrics.PositionsValue(positions, quoteFeedMock);
+            decimal actualValue = Metrics.AccountValue(account, quoteFeedMock);
 
             Assert.AreEqual(expectedValue, actualValue);
         }
         /// <summary>
-        /// test positions value for a single position
+        /// test account value for a single position
         /// </summary>
         [TestMethod]
-        public void PositionsValueOne()
+        public void AccountValueOne()
         {
             Quote quote1 = new Quote()
             {
@@ -50,13 +50,11 @@ namespace ReportsTests
                 Symbol = "test1",
             };
 
-            List<Position> positions = new List<Position>()
-            {
-                position1,
-            };
+            Account account = new Account();
+            account.Positions.Add(position1.Symbol, position1);
 
             decimal expectedValue = 50m;
-            decimal actualValue = Metrics.PositionsValue(positions, quoteFeedMock);
+            decimal actualValue = Metrics.AccountValue(account, quoteFeedMock);
 
             Assert.AreEqual(expectedValue, actualValue);
         }
@@ -64,7 +62,7 @@ namespace ReportsTests
         /// test a list of two positions
         /// </summary>
         [TestMethod]
-        public void PositionsValueTwo()
+        public void AccountValueTwo()
         {
             Quote quote1 = new Quote()
             {
@@ -98,13 +96,12 @@ namespace ReportsTests
                 Symbol = "test2",
             };
 
-            List<Position> positions = new List<Position>()
-            {
-                position1, postion2,
-            };
+            Account account = new Account();
+            account.Positions.Add(position1.Symbol, position1);
+            account.Positions.Add(postion2.Symbol, postion2);
 
             decimal expectedValue = 250m;
-            decimal actualValue = Metrics.PositionsValue(positions, quoteFeedMock);
+            decimal actualValue = Metrics.AccountValue(account, quoteFeedMock);
 
             Assert.AreEqual(expectedValue, actualValue);
         }

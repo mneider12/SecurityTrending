@@ -1,6 +1,5 @@
 ﻿using Core;
 using Model;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
@@ -12,16 +11,16 @@ namespace Reports
     public static class Metrics
     {
         /// <summary>
-        /// get the value of a list of positions
+        /// get the value of an account
         /// </summary>
-        /// <param name="positions">list of positions</param>
+        /// <param name="account">account</param>
         /// <param name="quoteFeed">quote feed</param>
         /// <returns>value</returns>
-        public static decimal PositionsValue(List<Position> positions, IQuoteFeed quoteFeed)
+        public static decimal AccountValue(Account account, IQuoteFeed quoteFeed)
         {
-            Contract.Requires(quoteFeed != null);
+            Contract.Requires(account?.Positions != null);
 
-            return positions.Aggregate(0m, ( total, position) => total + PositionValue(position, quoteFeed));
+            return account.Positions.Values.Aggregate(0m, (total, position) => total + PositionValue(position, quoteFeed));
         }
         /// <summary>
         /// get the value of a single position

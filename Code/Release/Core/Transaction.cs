@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model;
+using System;
 using static Core.TransactionEnums;
 
 namespace Core
@@ -12,6 +13,10 @@ namespace Core
         /// Unique transaction ID
         /// </summary>
         public int TransactionID { get; set; }
+        /// <summary>
+        /// Account
+        /// </summary>
+        public Account Account { get; set; }
         /// <summary>
         /// date transaction occured
         /// </summary>

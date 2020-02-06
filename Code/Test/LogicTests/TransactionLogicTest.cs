@@ -16,6 +16,87 @@ namespace LogicTests
     public class TransactionLogicTest
     {
         /// <summary>
+        /// test buying a new position
+        /// </summary>
+        [TestMethod]
+        public void NewTransactionBuyNew()
+        {
+            Account account = new Account();
+            Transaction transaction = new Transaction()
+            {
+                Account = account,
+                Action = TransactionAction.buy,
+                Amount = 125.50m,
+                Class = TransactionClass.stock,
+                Date = new System.DateTime(2000, 1, 1),
+                Quantity = 20m,
+                Symbol = "test",
+                TransactionID = 1,
+            };
+
+            NewTransaction(transaction);
+
+            decimal expectedQuantity = 20m;
+
+            Assert.AreEqual(expectedQuantity, account.Positions["test"].Quantity);
+        }
+        /// <summary>
+        /// test the new transaction for a buy on an existing position
+        /// </summary>
+        [TestMethod]
+        public void NewTransactionBuyMore()
+        {
+            Account account = new Account();
+            Position position = new Position()
+            {
+                Class = TransactionClass.stock,
+                Quantity = 15m,
+                Symbol = "test",
+            };
+
+            account.Positions.Add("test", position);
+
+            Transaction transaction = new Transaction()
+            {
+                Account = account,
+                Action = TransactionAction.buy,
+                Amount = 125.50m,
+                Class = TransactionClass.stock,
+                Date = new System.DateTime(2000, 1, 1),
+                Quantity = 20m,
+                Symbol = "test",
+                TransactionID = 1,
+            };
+
+            NewTransaction(transaction);
+
+            decimal expectedQuantity = 35m;
+
+            Assert.AreEqual(expectedQuantity, account.Positions["test"].Quantity);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(LogicException))]
+        public void NewTransactionSellMoreThanQuantity()
+        {
+            Account account = new Account();
+            Position position = new Position()
+            {
+                Class = TransactionClass.stock,
+                Quantity = 5m,
+                Symbol = "test",
+            };
+
+            Transaction transaction = new Transaction()
+            {
+                Account = account,
+                Action = TransactionAction.sell,
+                Quantity = 10m,
+                Symbol = "test",
+            };
+
+            NewTransaction(transaction);
+        }
+        /// <summary>
         /// test committing new buy transactions
         /// </summary>
         [TestMethod]

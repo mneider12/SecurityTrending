@@ -2,6 +2,8 @@
 using Database;
 using Model;
 using System;
+using System.Diagnostics.Contracts;
+using System.Globalization;
 using static Core.TransactionEnums;
 
 namespace Logic
@@ -11,6 +13,41 @@ namespace Logic
     /// </summary>
     public static class TransactionLogic
     {
+        public static void NewTransaction(Transaction transaction)
+        {
+            Contract.Requires(transaction != null);
+
+            Position position;
+            if (transaction.Account.Positions.ContainsKey(transaction.Symbol))
+            {
+                position = transaction.Account.Positions[transaction.Symbol];
+            }
+            else
+            {
+                position = new Position()
+                {
+                    Class = transaction.Class,
+                    Quantity = 0m,
+                    Symbol = transaction.Symbol,
+                };
+            }
+
+            if (transaction.Action == TransactionAction.buy)
+            {
+                position.Quantity += transaction.Quantity;
+            }
+            else if (transaction.Action == TransactionAction.sell) 
+            {
+                if (position.Quantity < transaction.Quantity)
+                {
+                    string message = string.Format(CultureInfo.InvariantCulture, "Tried to sell more than available. Have {0}, sell {1}", position.Quantity, transaction.Quantity);
+                    throw new LogicException(message);
+                }
+                position.Quantity -= transaction.Quantity;
+            }
+
+            transaction.Account.Positions[transaction.Symbol] = position;
+        }
         /// <summary>
         /// Commit a new transaction and update or create the related position
         /// </summary>

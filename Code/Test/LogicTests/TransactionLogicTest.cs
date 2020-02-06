@@ -74,6 +74,9 @@ namespace LogicTests
 
             Assert.AreEqual(expectedQuantity, account.Positions["test"].Quantity);
         }
+        /// <summary>
+        /// try to create a transaction to sell more than is available
+        /// </summary>
         [TestMethod]
         [ExpectedException(typeof(LogicException))]
         public void NewTransactionSellMoreThanQuantity()
@@ -86,6 +89,8 @@ namespace LogicTests
                 Symbol = "test",
             };
 
+            account.Positions["test"] = position;
+
             Transaction transaction = new Transaction()
             {
                 Account = account,
@@ -95,6 +100,36 @@ namespace LogicTests
             };
 
             NewTransaction(transaction);
+        }
+        /// <summary>
+        /// test selling with some left over
+        /// </summary>
+        [TestMethod]
+        public void NewTransactionSellLessThanQuantity()
+        {
+            Account account = new Account();
+            Position position = new Position()
+            {
+                Class = TransactionClass.stock,
+                Quantity = 10m,
+                Symbol = "test",
+            };
+
+            account.Positions["test"] = position;
+
+            Transaction transaction = new Transaction()
+            {
+                Account = account,
+                Action = TransactionAction.sell,
+                Quantity = 7m,
+                Symbol = "test",
+            };
+
+            NewTransaction(transaction);
+
+            decimal expectedQuantity = 3m;
+
+            Assert.AreEqual(expectedQuantity, account.Positions["test"].Quantity);
         }
         /// <summary>
         /// test committing new buy transactions

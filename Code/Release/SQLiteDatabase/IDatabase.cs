@@ -25,12 +25,6 @@ namespace Database
         /// <param name="quote">a quote with the price, symbol, and date minimally set</param>
         void SaveQuote(Quote quote);
         /// <summary>
-        /// deprecated. Use SaveQuote instead
-        /// </summary>
-        /// <param name="quote"></param>
-        [Obsolete("Use SaveQuote instead")]
-        void SetPrice(Quote quote);
-        /// <summary>
         /// get the latest quote stored in the database
         /// </summary>
         /// <param name="symbol">symbol</param>

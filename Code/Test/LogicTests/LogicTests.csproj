@@ -66,17 +66,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Release\Core\Model.csproj">
-      <Project>{A76A5DC3-C3FD-4A31-91D1-022A43B5F2BF}</Project>
-      <Name>Model</Name>
+    <ProjectReference Include="..\..\Release\Database\Database.csproj">
+      <Project>{30168293-4395-4370-861f-b45296dd736a}</Project>
+      <Name>Database</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Release\Logic\Logic.csproj">
       <Project>{AA761AD5-8108-4571-9BB3-583BFD4650BA}</Project>
       <Name>Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Release\SQLiteDatabase\Database.csproj">
-      <Project>{EDC2D5F8-A9C0-41F9-9FDF-F6CBB05E308B}</Project>
-      <Name>Database</Name>
+    <ProjectReference Include="..\..\Release\Model\Model.csproj">
+      <Project>{7bff70e7-300b-47b1-859b-b532d3c0f1ec}</Project>
+      <Name>Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
